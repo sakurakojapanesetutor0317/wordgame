@@ -22,22 +22,26 @@ background:var(--bg-color);
 display:flex;
 flex-direction:column;
 align-items:center;
-padding:20px;
+padding: 10px 20px;
 margin:0;
 color:var(--text-main);
 }
 
-h1{
-margin-bottom:10px;
+h1 {
+    margin-top: 0;     /* h1自体の上の余白を消す */
+    margin-bottom: 5px; /* 下側の余白もさらに詰める */
+    font-size: 28px;   /* 少し小さくするとさらにスッキリします */
 }
 
+/* controlsを左揃えにする */
 .controls {
-    margin-bottom: 15px;
-    font-weight: bold;
+    margin: 0 auto 10px auto; /* 左右中央寄せのままにする */
+    width: 140px;            /* チェックボックスの幅に合わせて固定 */
     display: flex;
-    flex-direction: column; 
-    align-items: flex-start; 
-    gap: 10px; }
+    flex-direction: column;
+    align-items: flex-start; /* これで中身が左揃えになる */
+    gap: 5px;
+}
 /* 問題カードはそのままに */
 .card {
     background-color: var(--card-bg);
@@ -46,7 +50,7 @@ margin-bottom:10px;
     padding: 20px;
     width: 90%;
     max-width: 280px;
-    margin: 0 auto 20px auto;
+    margin: 0 auto 10px auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -59,7 +63,7 @@ margin-bottom:10px;
     gap: 8px; /* ボタン同士の隙間を詰める */
     width: 90%;
     max-width: 240px; /* カードより少し幅を狭くする */
-    margin: 0 auto;
+    margin: 0 auto 10px auto;
 }
 
 .answer {
@@ -150,17 +154,20 @@ background:#fee2e2;
 border-color:var(--wrong);
 }
 
-#score{
-margin-top:20px;
-font-size:20px;
-font-weight:bold;
+/* スコアエリアの調整 */
+#score {
+    margin-top: 0px; /* 選択肢との間隔を詰める */
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center; /* 真ん中寄せ */
 }
 
 #message{
-height:35px;
-margin-top:15px;
+height:30px;
+margin-top:5px; /* メッセージとの間隔も少し詰める */
 font-size:22px;
 font-weight:bold;
+text-align: center;
 }
 
 button {
@@ -311,10 +318,16 @@ Sound Effects
 
 <div id="message"></div>
 
+<!-- スコアエリア -->
 <div id="score">
-Score: <span id="correct">0</span> /
-<span id="total">0</span>
+    Score: <span id="correct">0</span> / <span id="total">0</span>
 </div>
+
+<!-- 戻るリンクをスコアの下に配置 -->
+<div style="text-align: center; margin-top: 10px;">
+    <a class="back" href="../index.html">← Back to Home</a>
+</div>
+
 <div id="result">
 
 <h2>🎉 Great Job! 🎉</h2>
