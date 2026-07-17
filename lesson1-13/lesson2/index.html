@@ -22,22 +22,31 @@ background:var(--bg-color);
 display:flex;
 flex-direction:column;
 align-items:center;
-padding:20px;
+padding: 10px 20px;
 margin:0;
 color:var(--text-main);
 }
 
-h1{
-margin-bottom:10px;
+h1 {
+    margin-top: 0;     /* h1自体の上の余白を消す */
+    margin-bottom: 5px; /* 下側の余白もさらに詰める */
+    font-size: 28px;   /* 少し小さくするとさらにスッキリします */
 }
 
 .controls {
-    margin-bottom: 15px;
-    font-weight: bold;
     display: flex;
-    flex-direction: column; 
-    align-items: flex-start; 
-    gap: 10px; }
+    flex-direction: column;
+    align-items: flex-start; /* 左端に寄せる */
+    margin: 0 auto 15px auto; /* 画面中央に配置 */
+    width: 180px; /* 全体の幅を固定して、ラベルの開始位置を揃える */
+}
+
+.controls label {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* チェックボックスと文字の間隔 */
+    text-align: left;
+}
 /* 問題カードはそのままに */
 .card {
     background-color: var(--card-bg);
@@ -45,8 +54,8 @@ margin-bottom:10px;
     border-radius: 18px;
     padding: 20px;
     width: 90%;
-    max-width: 260px;
-    margin: 0 auto 20px auto;
+    max-width: 280px;
+    margin: 0 auto 10px auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -59,7 +68,7 @@ margin-bottom:10px;
     gap: 8px; /* ボタン同士の隙間を詰める */
     width: 90%;
     max-width: 240px; /* カードより少し幅を狭くする */
-    margin: 0 auto;
+    margin: 0 auto 10px auto;
 }
 
 .answer {
@@ -82,23 +91,6 @@ ruby rt {
     font-size: 0.5em;
     font-weight: bold;
 }
-/* コントロールエリアの調整 */
-.controls {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    margin: 10px auto !important;
-}
-
-/* コントロールパネルを画面幅に合わせて中央に配置 */
-.controls {
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* 中央寄せ */
-    gap: 10px;
-}
-
 #question{
 font-size:34px;
 font-weight:bold;
@@ -150,29 +142,38 @@ background:#fee2e2;
 border-color:var(--wrong);
 }
 
-#score{
-margin-top:20px;
-font-size:20px;
-font-weight:bold;
+/* スコアエリアの調整 */
+#score {
+    margin-top: 0px; /* 選択肢との間隔を詰める */
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center; /* 真ん中寄せ */
 }
 
 #message{
-height:35px;
-margin-top:15px;
+height:30px;
+margin-top:5px; /* メッセージとの間隔も少し詰める */
 font-size:22px;
 font-weight:bold;
+text-align: center;
 }
 
-button{
-margin-top:25px;
-padding:12px 30px;
-font-size:18px;
-background:#818cf8;
-color:white;
-border:none;
-border-radius:20px;
-cursor:pointer;
-display:none;
+button {
+    margin-top: 25px;
+    padding: 12px 30px;
+    font-size: 18px;
+    font-weight: bold; /* ここを太字に設定 */
+    background: #818cf8;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    display: none;
+    transition: transform 0.2s; /* おまけで軽く動く演出 */
+}
+
+button:hover {
+    transform: scale(1.05); /* ホバー時に少し大きく */
 }
 /* ---------- Animation ---------- */
 
@@ -270,7 +271,6 @@ font-weight:bold;
     cursor: pointer;
     display: inline-block;
 }
-
 </style>
 </head>
 
