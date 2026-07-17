@@ -33,14 +33,19 @@ h1 {
     font-size: 28px;   /* 少し小さくするとさらにスッキリします */
 }
 
-/* controlsを左揃えにする */
 .controls {
-    margin: 0 auto 10px auto; /* 左右中央寄せのままにする */
-    width: 140px;            /* チェックボックスの幅に合わせて固定 */
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* これで中身が左揃えになる */
-    gap: 5px;
+    align-items: flex-start; /* 左端に寄せる */
+    margin: 0 auto 15px auto; /* 画面中央に配置 */
+    width: 180px; /* 全体の幅を固定して、ラベルの開始位置を揃える */
+}
+
+.controls label {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* チェックボックスと文字の間隔 */
+    text-align: left;
 }
 /* 問題カードはそのままに */
 .card {
