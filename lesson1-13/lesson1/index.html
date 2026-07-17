@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Minna no Nihongo Lesson 1 Quiz</title>
+
+<style>
+:root{
+--bg-color:#f5f3ff;
+--card-bg:#ffffff;
+--primary:#a78bfa;
+--text-main:#4c1d95;
+--border-color:#f3e8ff;
+--accent-pink:#f172a3;
+--correct:#10b981;
+--wrong:#ef4444;
+}
+
+body{
+font-family:'Nunito',sans-serif;
+background:var(--bg-color);
+display:flex;
+flex-direction:column;
+align-items:center;
+padding:20px;
+margin:0;
+color:var(--text-main);
+}
+
+h1{
+margin-bottom:10px;
+}
+
+.controls {
+    margin-bottom: 15px;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start; 
+    gap: 10px; }
+/* 問題カードはそのままに */
+.card {
+    background-color: var(--card-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 18px;
+    padding: 20px;
+    width: 90%;
+    max-width: 280px;
+    margin: 0 auto 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 選択肢ボタンを小さくして見栄えを整える */
+.answers {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px; /* ボタン同士の隙間を詰める */
+    width: 90%;
+    max-width: 240px; /* カードより少し幅を狭くする */
+    margin: 0 auto;
+}
+
+.answer {
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold; /* ここを太字に設定 */
+    border-width: 2px;
+    border-style: solid; /* 枠線が消えないよう念のため指定 */
+    border-color: var(--border-color);
+    border-radius: 18px;
+    text-align: center;
+    background: white;
+    cursor: pointer;
+    transition: .2s;
+}
+
+/* ルビの色 */
+ruby rt {
+    color: #8b5cf6;
+    font-size: 0.5em;
+    font-weight: bold;
+}
+/* コントロールエリアの調整 */
+.controls {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    margin: 10px auto !important;
+}
+
+/* コントロールパネルを画面幅に合わせて中央に配置 */
+.controls {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 中央寄せ */
+    gap: 10px;
+}
+
+#question{
+font-size:34px;
+font-weight:bold;
+}
+
+#romaji{
+
+margin-top:15px;
+
+padding-top:12px;
+
+width:80%;
+
+border-top:2px solid #ece8ff;
+
+font-size:18px;
+
+font-weight:normal;
+
+letter-spacing:2px;
+
+color:#8b7fbf;
+
+text-align:center;
+
+}
+
+.answer{
+padding:14px;
+font-size:18px;
+background:white;
+border:3px solid var(--border-color);
+border-radius:18px;
+cursor:pointer;
+transition:.2s;
+}
+
+.answer:hover{
+transform:scale(1.02);
+}
+
+.correct{
+background:#d1fae5;
+border-color:var(--correct);
+}
+
+.wrong{
+background:#fee2e2;
+border-color:var(--wrong);
+}
+
+#score{
+margin-top:20px;
+font-size:20px;
+font-weight:bold;
+}
+
+#message{
+height:35px;
+margin-top:15px;
+font-size:22px;
+font-weight:bold;
+}
+
+button {
+    margin-top: 25px;
+    padding: 12px 30px;
+    font-size: 18px;
+    font-weight: bold; /* ここを太字に設定 */
+    background: #818cf8;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    display: none;
+    transition: transform 0.2s; /* おまけで軽く動く演出 */
+}
+
+button:hover {
+    transform: scale(1.05); /* ホバー時に少し大きく */
+}
+/* ---------- Animation ---------- */
+
+@keyframes bounce{
+0%{transform:scale(1);}
+35%{transform:scale(1.08);}
+60%{transform:scale(.95);}
+100%{transform:scale(1);}
+}
+
+@keyframes shake{
+0%{transform:translateX(0);}
+20%{transform:translateX(-8px);}
+40%{transform:translateX(8px);}
+60%{transform:translateX(-8px);}
+80%{transform:translateX(8px);}
+100%{transform:translateX(0);}
+}
+
+@keyframes fadeIn{
+
+from{
+opacity:0;
+transform:translateY(15px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+.bounce{
+animation:bounce .45s;
+}
+
+.shake{
+animation:shake .45s;
+}
+
+.fade{
+animation:fadeIn .4s;
+}
+
+/* ---------- Result ---------- */
+
+#result{
+
+display:none;
+
+text-align:center;
+
+margin-top:30px;
+
+animation:fadeIn .7s;
+
+}
+
+#stars{
+
+font-size:42px;
+
+margin:20px 0;
+
+color:#facc15;
+
+}
+
+#result h2{
+
+font-size:38px;
+
+margin:10px;
+
+color:#7c3aed;
+
+}
+
+#result p{
+
+font-size:22px;
+
+font-weight:bold;
+
+}
+/* 結果画面表示中にカードを隠す */
+#result + button {
+    display: block; /* Play Againボタンは表示 */
+}
+/* 星を少し華やかにする */
+#stars {
+    font-size: 50px; /* 星を少し大きく */
+    margin: 20px 0;
+    cursor: pointer;
+    display: inline-block;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Lesson 1 Quiz</h1>
+
+<div class="controls">
+<label>
+<input type="checkbox" id="mode">
+Kanji Mode
+</label>
+<label>
+<input type="checkbox" id="romajiMode" checked>
+Show Romaji
+</label>
+<label>
+<input type="checkbox" id="soundMode" checked>
+Sound Effects
+</label>
+
+</div>
+
+<div class="card">
+
+<div id="question"></div>
+
+<div id="romaji"></div>
+
+</div>
+
+<div class="answers" id="answers"></div>
+
+<div id="message"></div>
+
+<div id="score">
+Score: <span id="correct">0</span> /
+<span id="total">0</span>
+</div>
+<div id="result">
+
+<h2>🎉 Great Job! 🎉</h2>
+
+<div id="stars"></div>
+
+<p id="finalScore"></p>
+
+</div>
+<button onclick="restart()">Play Again</button>
+
+<script>
+// ===== Sound =====
+
+const audio = new (window.AudioContext || window.webkitAudioContext)();
+
+function playTone(freq,duration){
+
+const osc=audio.createOscillator();
+const gain=audio.createGain();
+
+osc.connect(gain);
+gain.connect(audio.destination);
+
+osc.frequency.value=freq;
+osc.type="triangle";
+
+gain.gain.value=0.15;
+
+osc.start();
+
+gain.gain.exponentialRampToValueAtTime(
+0.0001,
+audio.currentTime+duration
+);
+
+osc.stop(audio.currentTime+duration);
+
+}
+
+function correctSound(){
+
+if(!document.getElementById("soundMode").checked) return;
+
+playTone(700,.08);
+
+setTimeout(()=>{
+playTone(900,.12);
+},90);
+
+}
+
+function wrongSound(){
+
+if(!document.getElementById("soundMode").checked) return;
+
+playTone(180,.25);
+
+}
+
+function finishSound() {
+    if(!document.getElementById("soundMode").checked) return;
+    // 必要であればここにAudioContextを使用した処理を追加
+}
+const data=[
+
+{k:"<ruby>私<rt>わたし</rt></ruby>",r:"わたし",m:"wa ta shi",a:"I"},
+{k:"<ruby>貴方<rt>あなた</rt></ruby>",r:"あなた",m:"a na ta",a:"You"},
+{k:"<ruby>彼<rt>かれ</rt></ruby>",r:"かれ",m:"ka re",a:"He"},
+{k:"<ruby>彼女<rt>かのじょ</rt></ruby>",r:"かのじょ",m:"ka no jo",a:"She"},
+{k:"<ruby>先生<rt>せんせい</rt></ruby>",r:"せんせい",m:"se n se i",a:"Teacher"},
+{k:"<ruby>教師<rt>きょうし</rt></ruby>",r:"きょうし",m:"kyo u shi",a:"Teacher (profession)"},
+{k:"<ruby>学生<rt>がくせい</rt></ruby>",r:"がくせい",m:"ga ku se i",a:"Student"},
+{k:"<ruby>会社員<rt>かいしゃいん</rt></ruby>",r:"かいしゃいん",m:"ka i sha i n",a:"Company employee"},
+{k:"<ruby>銀行員<rt>ぎんこういん</rt></ruby>",r:"ぎんこういん",m:"gi n ko u i n",a:"Bank employee"},
+{k:"<ruby>医者<rt>いしゃ</rt></ruby>",r:"いしゃ",m:"i sha",a:"Doctor"},
+{k:"<ruby>研究者<rt>けんきゅうしゃ</rt></ruby>",r:"けんきゅうしゃ",m:"ke n kyu u sha",a:"Researcher"},
+{k:"エンジニア",r:"エンジニア",m:"e n ji ni a",a:"Engineer"},
+{k:"<ruby>仕事<rt>しごと</rt></ruby>",m:"shi go to",r:"しごと",a:"Job"},
+{k:"<ruby>学校<rt>がっこう</rt></ruby>",r:"がっこう",m:"ga kko u",a:"School"},
+{k:"<ruby>病院<rt>びょういん</rt></ruby>",r:"びょういん",m:"byo u i n",a:"Hospital"},
+{k:"<ruby>国<rt>くに</rt></ruby>",r:"くに",m:"ku ni",a:"Country"},
+{k:"<ruby>日本<rt>にほん</rt></ruby>",r:"にほん",m:"ni ho n",a:"Japan"},
+{k:"<ruby>日本人<rt>にほんじん</rt></ruby>",r:"にほんじん",m:"ni ho n ji n",a:"Japanese"},
+{k:"<ruby>外国人<rt>がいこくじん</rt></ruby>",r:"がいこくじん",m:"ga i ko ku ji n",a:"Foreigner"}
+
+];
+
+let quiz=[];
+let index=0;
+let score=0;
+
+function shuffle(array){
+return [...array].sort(()=>Math.random()-0.5);
+}
+
+function start(){
+
+quiz=shuffle(data);
+
+index=0;
+score=0;
+
+document.querySelector("button").style.display="none";
+
+nextQuestion();
+
+}
+
+function nextQuestion(){
+
+document.getElementById("message").textContent="";
+
+document.getElementById("correct").textContent=score;
+document.getElementById("total").textContent = index + 1;
+
+if(index>=quiz.length){
+
+    finishSound();
+
+    document.getElementById("question").innerHTML = ""; 
+    document.getElementById("romaji").textContent = "";
+    document.getElementById("question").style.display="none"; 
+    document.querySelector(".card").style.display = "none";
+
+    document.getElementById("answers").style.display="none";
+
+    document.getElementById("message").style.display="none";
+
+    document.getElementById("score").style.display="none";
+    
+let rate=score/data.length;
+
+let stars="⭐";
+
+if(rate===1){
+
+stars="⭐⭐⭐⭐⭐";
+
+}else if(rate>=0.8){
+
+stars="⭐⭐⭐⭐";
+
+}else if(rate>=0.6){
+
+stars="⭐⭐⭐";
+
+}else if(rate>=0.4){
+
+stars="⭐⭐";
+
+}
+
+document.getElementById("stars").textContent=stars;
+
+document.getElementById("finalScore").innerHTML=
+`${score} / ${data.length}`;
+
+document.getElementById("result").style.display="block";
+
+document.querySelector("button").style.display="block";
+
+return;
+
+}
+
+let current=quiz[index];
+
+document.getElementById("question").innerHTML=
+document.getElementById("mode").checked
+?current.k
+:current.r;
+document.getElementById("romaji").textContent =
+document.getElementById("romajiMode").checked
+? (current.m || "")
+: "";
+
+let choices=[current.a];
+
+while(choices.length<4){
+
+let word=data[Math.floor(Math.random()*data.length)].a;
+
+if(!choices.includes(word))
+choices.push(word);
+
+}
+
+choices=shuffle(choices);
+
+let html="";
+
+choices.forEach(choice=>{
+
+html+=`<div class="answer"
+onclick="answer(this,'${choice.replace(/'/g,"\\'")}')">${choice}</div>`;
+
+});
+
+document.getElementById("answers").innerHTML=html;
+
+}
+
+function answer(element,choice){
+
+let current=quiz[index];
+
+const card=document.getElementById("question");
+
+document.querySelectorAll(".answer").forEach(btn=>{
+
+btn.onclick=null;
+
+if(btn.textContent===current.a){
+
+btn.classList.add("correct");
+
+}
+
+});
+
+if(choice===current.a){
+
+score++;
+
+correctSound();
+
+card.classList.remove("bounce");
+
+void card.offsetWidth;
+
+card.classList.add("bounce");
+
+document.getElementById("message").textContent="✨ Correct!";
+
+}else{
+
+wrongSound();
+
+element.classList.add("wrong");
+
+card.classList.remove("shake");
+
+void card.offsetWidth;
+
+card.classList.add("shake");
+
+document.getElementById("message").textContent="❌ "+current.a;
+
+}
+
+setTimeout(()=>{
+
+index++;
+
+nextQuestion();
+
+},1000);
+
+}
+
+function restart(){
+
+document.getElementById("question").style.display="flex";
+
+document.getElementById("answers").style.display="grid";
+
+document.getElementById("message").style.display="block";
+
+document.getElementById("score").style.display="block";
+
+document.getElementById("result").style.display="none";
+
+start();
+
+}
+
+document.getElementById("mode")
+.addEventListener("change",nextQuestion);
+
+document.getElementById("romajiMode")
+.addEventListener("change",nextQuestion);
+
+start();
+
+
+</script>
+
+</body>
+</html>
