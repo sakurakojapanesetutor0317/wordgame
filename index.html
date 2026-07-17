@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Japanese Flashcards</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#f6f7fb;
+    color:#333;
+}
+
+/* ブルー系に変更 */
+header{
+    background:#5c7cfa; 
+    color:white;
+    padding:35px 20px;
+    text-align:center;
+}
+
+header h1{
+    font-size:2.3rem;
+}
+
+header p{
+    margin-top:10px;
+    opacity:.9;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:40px 20px;
+}
+
+h2{
+    margin-bottom:20px;
+    color:#444;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:20px;
+    margin-bottom:50px;
+}
+
+.card{
+    background:white;
+    border-radius:15px;
+    padding:25px;
+    text-align:center;
+    text-decoration:none;
+    color:#333;
+    box-shadow:0 5px 12px rgba(0,0,0,.08);
+    transition:.25s;
+}
+
+.card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 12px 22px rgba(92,124,250,.2); /* 青系の影 */
+}
+
+.icon{
+    font-size:52px;
+    margin-bottom:15px;
+}
+
+.title{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.desc{
+    margin-top:8px;
+    color:#777;
+    font-size:14px;
+}
+
+footer{
+    text-align:center;
+    padding:30px;
+    color:#999;
+    font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🎮 Japanese Quiz Game</h1>
+    <p>Test your knowledge with interactive challenges</p>
+</header>
+
+<div class="container">
+
+<!-- Minna -->
+
+<h2>📖 Minna no Nihongo</h2>
+
+<div class="grid">
+
+<a class="card" href="lesson1-13/index.html">
+
+<div class="icon">📖</div>
+
+<div class="title">Lesson 1–13</div>
+
+<div class="desc">Beginner Basics</div>
+
+</a>
+
+<a class="card" href="lesson14-25/index.html">
+
+<div class="icon">📖</div>
+
+<div class="title">Lesson 14–25</div>
+
+<div class="desc">Elementary</div>
+
+</a>
+
+<a class="card" href="lesson26-38/index.html">
+
+<div class="icon">📖</div>
+
+<div class="title">Lesson 26–38</div>
+
+<div class="desc">Intermediate</div>
+
+</a>
+
+<a class="card" href="lesson39-50/index.html">
+
+<div class="icon">📖</div>
+
+<div class="title">Lesson 39–50</div>
+
+<div class="desc">Advanced N4</div>
+
+</a>
+
+</div>
+
+
+
+<!-- Verb -->
+
+<h2>📝 Verb Conjugation</h2>
+
+<div class="grid">
+
+<a class="card" href="te-form/index.html">
+
+<div class="icon">📝</div>
+
+<div class="title">Te-form</div>
+
+<div class="desc">Verb Practice</div>
+
+</a>
+
+<a class="card" href="ta-form/index.html">
+
+<div class="icon">📅</div>
+
+<div class="title">Ta-form</div>
+
+<div class="desc">Past Form</div>
+
+</a>
+
+<a class="card" href="nai-form/index.html">
+
+<div class="icon">❌</div>
+
+<div class="title">Nai-form</div>
+
+<div class="desc">Negative Form</div>
+
+</a>
+
+<a class="card" href="dictionary-form/index.html">
+
+<div class="icon">📚</div>
+
+<div class="title">Dictionary Form</div>
+
+<div class="desc">Plain Form</div>
+
+</a>
+
+</div>
+
+
+
+<!-- Grammar -->
+
+<h2>💬 Grammar</h2>
+
+<div class="grid">
+
+<a class="card" href="particles/index.html">
+
+<div class="icon">⚪</div>
+
+<div class="title">Particles</div>
+
+</a>
+
+<a class="card" href="adjectives/index.html">
+
+<div class="icon">🎨</div>
+
+<div class="title">Adjectives</div>
+
+</a>
+
+<a class="card" href="counters/index.html">
+
+<div class="icon">🎯</div>
+
+<div class="title">Counters</div>
+
+</a>
+
+<a class="card" href="time/index.html">
+
+<div class="icon">⏰</div>
+
+<div class="title">Time</div>
+
+</a>
+
+</div>
+
+
+
+<!-- Vocabulary -->
+
+<h2>🍣 Vocabulary</h2>
+
+<div class="grid">
+
+<a class="card" href="food/index.html">
+
+<div class="icon">🍎</div>
+
+<div class="title">Food</div>
+
+</a>
+
+<a class="card" href="family/index.html">
+
+<div class="icon">👨‍👩‍👧</div>
+
+<div class="title">Family</div>
+
+</a>
+
+<a class="card" href="places/index.html">
+
+<div class="icon">🏠</div>
+
+<div class="title">Places</div>
+
+</a>
+
+<a class="card" href="transportation/index.html">
+
+<div class="icon">🚃</div>
+
+<div class="title">Transportation</div>
+
+</a>
+
+</div>
+
+</div>
+
+<footer>
+
+Made with ❤️ for Japanese Learners
+
+</footer>
+
+</body>
+</html>
