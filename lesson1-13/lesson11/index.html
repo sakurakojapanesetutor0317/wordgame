@@ -28,9 +28,9 @@ color:var(--text-main);
 }
 
 h1 {
-    margin-top: 10;     /* h1自体の上の余白を消す */
-    margin-bottom: 5px; /* 下側の余白もさらに詰める */
-    font-size: 28px;   /* 少し小さくするとさらにスッキリします */
+    margin-top: 10;     
+    margin-bottom: 5px; 
+    font-size: 28px;   
 }
 
 .controls {
@@ -144,15 +144,15 @@ border-color:var(--wrong);
 
 /* スコアエリアの調整 */
 #score {
-    margin-top: 0px; /* 選択肢との間隔を詰める */
+    margin-top: 20px; 
     font-size: 20px;
     font-weight: bold;
     text-align: center; /* 真ん中寄せ */
 }
 
 #message{
-height:30px;
-margin-top:5px; /* メッセージとの間隔も少し詰める */
+height:20px;
+margin-top:10px; 
 font-size:22px;
 font-weight:bold;
 text-align: center;
@@ -306,25 +306,27 @@ Sound Effects
 
 <div id="message"></div>
 
+<!-- スコアエリア -->
 <div id="score">
-Score: <span id="correct">0</span> /
-<span id="total">0</span>
+    Score: <span id="correct">0</span> / <span id="total">0</span>
 </div>
-<!-- 戻るリンクをスコアの下に配置 -->
-<div style="text-align: center; margin-top: 10px;">
-    <a class="back" href="../index.html">← Back to Home</a>
-</div>
+
+
+
 <div id="result">
-    <h2>🎉 Great Job! 🎉</h2>   
-    <div id="stars"></div>
-    <p id="finalScore"></p>
-</div>
+
+<h2>🎉 Great Job! 🎉</h2>
+
+<div id="stars"></div>
 
 <p id="finalScore"></p>
 
 </div>
 <button onclick="restart()">Play Again</button>
 
+<div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+    <a class="back" href="../index.html">← Back to Home</a>
+</div>
 <script>
 // ===== Sound =====
 
@@ -473,66 +475,100 @@ nextQuestion();
 
 function nextQuestion(){
 
-    document.getElementById("message").textContent="";
-    document.getElementById("correct").textContent=score;
-    document.getElementById("total").textContent = index + 1;
+document.getElementById("message").textContent="";
 
-    // クイズ終了判定
-    if(index >= quiz.length){
-        finishSound();
-        document.getElementById("question").innerHTML = ""; 
-        document.getElementById("romaji").textContent = "";
-        document.getElementById("question").style.display="none"; 
-        document.querySelector(".card").style.display = "none";
-        document.getElementById("answers").style.display="none";
-        document.getElementById("message").style.display="none";
-        document.getElementById("score").style.display="none";
-        
-        let rate = score / data.length;
-        let stars = rate === 1 ? "⭐⭐⭐⭐⭐" : rate >= 0.8 ? "⭐⭐⭐⭐" : rate >= 0.6 ? "⭐⭐⭐" : rate >= 0.4 ? "⭐⭐" : "⭐";
+document.getElementById("correct").textContent=score;
+document.getElementById("total").textContent = index + 1;
 
-        document.getElementById("stars").textContent = stars;
-        document.getElementById("finalScore").innerHTML = `${score} / ${data.length}`;
-        document.getElementById("result").style.display = "block";
-        document.querySelector("button").style.display = "block";
-        return;
-    }
+if(index>=quiz.length){
 
-    // 問題のセット
-    let current = quiz[index];
-    document.getElementById("question").innerHTML = document.getElementById("mode").checked ? current.k : current.r;
-    document.getElementById("romaji").textContent = document.getElementById("romajiMode").checked ? (current.m || "") : "";
+    finishSound();
 
-    // 決まった選択肢を表示したいリスト
-    const fixedChoices = {
-        "これ": ["this / near the speaker", "that / near the listener", "that / far away", "which"],
-        "それ": ["this / near the speaker", "that / near the listener", "that / far away", "which"],
-        "あれ": ["this / near the speaker", "that / near the listener", "that / far away", "which"],
-        "どれ": ["this / near the speaker", "that / near the listener", "that / far away", "which"],
-        "この": ["this (+ NOUN) / near the speaker", "that (+ NOUN) / near the listener", "that (+ NOUN) / far away", "which (+ NOUN)"],
-        "その": ["this (+ NOUN) / near the speaker", "that (+ NOUN) / near the listener", "that (+ NOUN) / far away", "which (+ NOUN)"],
-        "あの": ["this (+ NOUN) / near the speaker", "that (+ NOUN) / near the listener", "that (+ NOUN) / far away", "which (+ NOUN)"],
-        "どの": ["this (+ NOUN) / near the speaker", "that (+ NOUN) / near the listener", "that (+ NOUN) / far away", "which (+ NOUN)"]
-    };
+    document.getElementById("question").innerHTML = ""; 
+    document.getElementById("romaji").textContent = "";
+    document.getElementById("question").style.display="none"; 
+    document.querySelector(".card").style.display = "none";
 
-    let choices = [];
-    if (fixedChoices[current.k]) {
-        choices = fixedChoices[current.k];
-    } else {
-        choices = [current.a];
-        while(choices.length < 4){
-            let word = data[Math.floor(Math.random() * data.length)].a;
-            if(!choices.includes(word)) choices.push(word);
-        }
-        choices = shuffle(choices);
-    }
+    document.getElementById("answers").style.display="none";
 
-    let html = "";
-    choices.forEach(choice => {
-        html += `<div class="answer" onclick="answer(this,'${choice.replace(/'/g,"\\'")}')">${choice}</div>`;
-    });
-    document.getElementById("answers").innerHTML = html;
+    document.getElementById("message").style.display="none";
+
+    document.getElementById("score").style.display="none";
+    document.querySelector(".controls").style.display = "none";
+    document.querySelector("h1").style.display = "none"; 
+    
+let rate=score/data.length;
+
+let stars="⭐";
+
+if(rate===1){
+
+stars="⭐⭐⭐⭐⭐";
+
+}else if(rate>=0.8){
+
+stars="⭐⭐⭐⭐";
+
+}else if(rate>=0.6){
+
+stars="⭐⭐⭐";
+
+}else if(rate>=0.4){
+
+stars="⭐⭐";
+
 }
+
+document.getElementById("stars").textContent=stars;
+
+document.getElementById("finalScore").innerHTML=
+`${score} / ${data.length}`;
+
+document.getElementById("result").style.display="block";
+
+document.querySelector("button").style.display="block";
+
+return;
+
+}
+
+let current=quiz[index];
+
+document.getElementById("question").innerHTML=
+document.getElementById("mode").checked
+?current.k
+:current.r;
+document.getElementById("romaji").textContent =
+document.getElementById("romajiMode").checked
+? (current.m || "")
+: "";
+
+let choices=[current.a];
+
+while(choices.length<4){
+
+let word=data[Math.floor(Math.random()*data.length)].a;
+
+if(!choices.includes(word))
+choices.push(word);
+
+}
+
+choices=shuffle(choices);
+
+let html="";
+
+choices.forEach(choice=>{
+
+html+=`<div class="answer"
+onclick="answer(this,'${choice.replace(/'/g,"\\'")}')">${choice}</div>`;
+
+});
+
+document.getElementById("answers").innerHTML=html;
+
+}
+
 function answer(element,choice){
 
 let current=quiz[index];
