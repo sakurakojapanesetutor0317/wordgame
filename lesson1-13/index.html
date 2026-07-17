@@ -4,9 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Japanese Flashcards</title>
+<title>Minna no Nihongo | Lessons 1–13</title>
 
 <style>
+
 *{
     margin:0;
     padding:0;
@@ -19,12 +20,11 @@ body{
     color:#333;
 }
 
-/* ブルー系に変更 */
 header{
-    background:#5c7cfa; 
+    background:#4f8ef7;
     color:white;
-    padding:35px 20px;
     text-align:center;
+    padding:35px 20px;
 }
 
 header h1{
@@ -42,246 +42,190 @@ header p{
     padding:40px 20px;
 }
 
-h2{
-    margin-bottom:20px;
-    color:#444;
+.back{
+
+    display:inline-block;
+
+    margin-bottom:35px;
+
+    text-decoration:none;
+
+    color:#4f8ef7;
+
+    font-weight:bold;
+
 }
 
 .grid{
+
     display:grid;
+
     grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+
     gap:20px;
-    margin-bottom:50px;
+
 }
 
 .card{
+
     background:white;
+
     border-radius:15px;
+
     padding:25px;
+
     text-align:center;
+
     text-decoration:none;
+
     color:#333;
+
     box-shadow:0 5px 12px rgba(0,0,0,.08);
+
     transition:.25s;
+
 }
 
 .card:hover{
+
     transform:translateY(-6px);
-    box-shadow:0 12px 22px rgba(92,124,250,.2); /* 青系の影 */
+
+    box-shadow:0 12px 22px rgba(0,0,0,.15);
+
 }
 
 .icon{
-    font-size:52px;
+
+    font-size:55px;
+
     margin-bottom:15px;
+
 }
 
-.title{
-    font-size:20px;
+.lesson{
+
+    font-size:22px;
+
     font-weight:bold;
+
 }
 
-.desc{
+.topic{
+
     margin-top:8px;
+
     color:#777;
+
     font-size:14px;
+
 }
 
 footer{
+
     text-align:center;
-    padding:30px;
+
+    padding:40px;
+
     color:#999;
-    font-size:14px;
+
 }
+
 </style>
+
 </head>
 
 <body>
 
 <header>
-    <h1>🎮 Japanese Quiz Game</h1>
-    <p>Test your knowledge with interactive challenges</p>
+
+<h1>📖 Minna no Nihongo</h1>
+
+<p>Lessons 1–13</p>
+
 </header>
 
 <div class="container">
 
-<!-- Minna -->
-
-<h2>📖 Minna no Nihongo</h2>
+<a class="back" href="../index.html">← Back to Home</a>
 
 <div class="grid">
 
-<a class="card" href="lesson1-13/index.html">
-
-<div class="icon">📖</div>
-
-<div class="title">Lesson 1–13</div>
-
-<div class="desc">Beginner Basics</div>
-
+<a class="card" href="../lesson1/index.html">
+<div class="icon">📘</div>
+<div class="lesson">Lesson 1</div>
+<div class="topic">Greetings</div>
 </a>
 
-<a class="card" href="lesson14-25/index.html">
-
-<div class="icon">📖</div>
-
-<div class="title">Lesson 14–25</div>
-
-<div class="desc">Elementary</div>
-
+<a class="card" href="../lesson2/index.html">
+<div class="icon">📘</div>
+<div class="lesson">Lesson 2</div>
+<div class="topic">This / That</div>
 </a>
 
-<a class="card" href="lesson26-38/index.html">
-
-<div class="icon">📖</div>
-
-<div class="title">Lesson 26–38</div>
-
-<div class="desc">Intermediate</div>
-
+<a class="card" href="../lesson3/index.html">
+<div class="icon">📘</div>
+<div class="lesson">Lesson 3</div>
+<div class="topic">Places</div>
 </a>
 
-<a class="card" href="lesson39-50/index.html">
-
-<div class="icon">📖</div>
-
-<div class="title">Lesson 39–50</div>
-
-<div class="desc">Advanced N4</div>
-
+<a class="card" href="../lesson4/index.html">
+<div class="icon">📘</div>
+<div class="lesson">Lesson 4</div>
+<div class="topic">Time</div>
 </a>
 
-</div>
-
-
-
-<!-- Verb -->
-
-<h2>📝 Verb Conjugation</h2>
-
-<div class="grid">
-
-<a class="card" href="te-form/index.html">
-
-<div class="icon">📝</div>
-
-<div class="title">Te-form</div>
-
-<div class="desc">Verb Practice</div>
-
+<a class="card" href="../lesson5/index.html">
+<div class="icon">📘</div>
+<div class="lesson">Lesson 5</div>
+<div class="topic">Go / Come</div>
 </a>
 
-<a class="card" href="ta-form/index.html">
-
-<div class="icon">📅</div>
-
-<div class="title">Ta-form</div>
-
-<div class="desc">Past Form</div>
-
+<a class="card" href="../lesson6/index.html">
+<div class="icon">📘</div>
+<div class="lesson">Lesson 6</div>
+<div class="topic">Actions</div>
 </a>
 
-<a class="card" href="nai-form/index.html">
-
-<div class="icon">❌</div>
-
-<div class="title">Nai-form</div>
-
-<div class="desc">Negative Form</div>
-
+<a class="card" href="../lesson7/index.html">
+<div class="icon">📘</div>
+<div class="lesson">Lesson 7</div>
+<div class="topic">Giving & Receiving</div>
 </a>
 
-<a class="card" href="dictionary-form/index.html">
-
-<div class="icon">📚</div>
-
-<div class="title">Dictionary Form</div>
-
-<div class="desc">Plain Form</div>
-
+<a class="card" href="../lesson8/index.html">
+<div class="icon">📘</div>
+<div class="lesson">Lesson 8</div>
+<div class="topic">Adjectives</div>
 </a>
 
-</div>
-
-
-
-<!-- Grammar -->
-
-<h2>💬 Grammar</h2>
-
-<div class="grid">
-
-<a class="card" href="particles/index.html">
-
-<div class="icon">⚪</div>
-
-<div class="title">Particles</div>
-
+<a class="card" href="../lesson9/index.html">
+<div class="icon">📘</div>
+<div class="lesson">Lesson 9</div>
+<div class="topic">Likes & Skills</div>
 </a>
 
-<a class="card" href="adjectives/index.html">
-
-<div class="icon">🎨</div>
-
-<div class="title">Adjectives</div>
-
+<a class="card" href="../lesson10/index.html">
+<div class="icon">📘</div>
+<div class="lesson">Lesson 10</div>
+<div class="topic">Location</div>
 </a>
 
-<a class="card" href="counters/index.html">
-
-<div class="icon">🎯</div>
-
-<div class="title">Counters</div>
-
+<a class="card" href="../lesson11/index.html">
+<div class="icon">📘</div>
+<div class="lesson">Lesson 11</div>
+<div class="topic">Quantity</div>
 </a>
 
-<a class="card" href="time/index.html">
-
-<div class="icon">⏰</div>
-
-<div class="title">Time</div>
-
+<a class="card" href="../lesson12/index.html">
+<div class="icon">📘</div>
+<div class="lesson">Lesson 12</div>
+<div class="topic">Past Tense</div>
 </a>
 
-</div>
-
-
-
-<!-- Vocabulary -->
-
-<h2>🍣 Vocabulary</h2>
-
-<div class="grid">
-
-<a class="card" href="food/index.html">
-
-<div class="icon">🍎</div>
-
-<div class="title">Food</div>
-
-</a>
-
-<a class="card" href="family/index.html">
-
-<div class="icon">👨‍👩‍👧</div>
-
-<div class="title">Family</div>
-
-</a>
-
-<a class="card" href="places/index.html">
-
-<div class="icon">🏠</div>
-
-<div class="title">Places</div>
-
-</a>
-
-<a class="card" href="transportation/index.html">
-
-<div class="icon">🚃</div>
-
-<div class="title">Transportation</div>
-
+<a class="card" href="../lesson13/index.html">
+<div class="icon">📘</div>
+<div class="lesson">Lesson 13</div>
+<div class="topic">Want to...</div>
 </a>
 
 </div>
