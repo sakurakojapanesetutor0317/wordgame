@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Minna no Nihongo Lesson 8 Quiz</title>
+
+<style>
+:root{
+--bg-color:#f5f3ff;
+--card-bg:#ffffff;
+--primary:#a78bfa;
+--text-main:#4c1d95;
+--border-color:#f3e8ff;
+--accent-pink:#f172a3;
+--correct:#10b981;
+--wrong:#ef4444;
+}
+
+body{
+font-family:'Nunito',sans-serif;
+background:var(--bg-color);
+display:flex;
+flex-direction:column;
+align-items:center;
+padding: 10px 20px;
+margin:0;
+color:var(--text-main);
+}
+
+h1 {
+    margin-top: 0;     /* h1自体の上の余白を消す */
+    margin-bottom: 5px; /* 下側の余白もさらに詰める */
+    font-size: 28px;   /* 少し小さくするとさらにスッキリします */
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* 左端に寄せる */
+    margin: 0 auto 15px auto; /* 画面中央に配置 */
+    width: 180px; /* 全体の幅を固定して、ラベルの開始位置を揃える */
+}
+
+.controls label {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* チェックボックスと文字の間隔 */
+    text-align: left;
+}
+/* 問題カードはそのままに */
+.card {
+    background-color: var(--card-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 18px;
+    padding: 20px;
+    width: 90%;
+    max-width: 280px;
+    margin: 0 auto 10px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 選択肢ボタンを小さくして見栄えを整える */
+.answers {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px; /* ボタン同士の隙間を詰める */
+    width: 90%;
+    max-width: 240px; /* カードより少し幅を狭くする */
+    margin: 0 auto 10px auto;
+}
+
+.answer {
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold; /* ここを太字に設定 */
+    border-width: 2px;
+    border-style: solid; /* 枠線が消えないよう念のため指定 */
+    border-color: var(--border-color);
+    border-radius: 18px;
+    text-align: center;
+    background: white;
+    cursor: pointer;
+    transition: .2s;
+}
+
+/* ルビの色 */
+ruby rt {
+    color: #8b5cf6;
+    font-size: 0.5em;
+    font-weight: bold;
+}
+#question{
+font-size:34px;
+font-weight:bold;
+}
+
+#romaji{
+
+margin-top:15px;
+
+padding-top:12px;
+
+width:80%;
+
+border-top:2px solid #ece8ff;
+
+font-size:18px;
+
+font-weight:normal;
+
+letter-spacing:2px;
+
+color:#8b7fbf;
+
+text-align:center;
+
+}
+
+.answer{
+padding:14px;
+font-size:18px;
+background:white;
+border:3px solid var(--border-color);
+border-radius:18px;
+cursor:pointer;
+transition:.2s;
+}
+
+.answer:hover{
+transform:scale(1.02);
+}
+
+.correct{
+background:#d1fae5;
+border-color:var(--correct);
+}
+
+.wrong{
+background:#fee2e2;
+border-color:var(--wrong);
+}
+
+/* スコアエリアの調整 */
+#score {
+    margin-top: 0px; /* 選択肢との間隔を詰める */
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center; /* 真ん中寄せ */
+}
+
+#message{
+height:30px;
+margin-top:5px; /* メッセージとの間隔も少し詰める */
+font-size:22px;
+font-weight:bold;
+text-align: center;
+}
+
+button {
+    margin-top: 25px;
+    padding: 12px 30px;
+    font-size: 18px;
+    font-weight: bold; /* ここを太字に設定 */
+    background: #818cf8;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    display: none;
+    transition: transform 0.2s; /* おまけで軽く動く演出 */
+}
+
+button:hover {
+    transform: scale(1.05); /* ホバー時に少し大きく */
+}
+/* ---------- Animation ---------- */
+
+@keyframes bounce{
+0%{transform:scale(1);}
+35%{transform:scale(1.08);}
+60%{transform:scale(.95);}
+100%{transform:scale(1);}
+}
+
+@keyframes shake{
+0%{transform:translateX(0);}
+20%{transform:translateX(-8px);}
+40%{transform:translateX(8px);}
+60%{transform:translateX(-8px);}
+80%{transform:translateX(8px);}
+100%{transform:translateX(0);}
+}
+
+@keyframes fadeIn{
+
+from{
+opacity:0;
+transform:translateY(15px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+.bounce{
+animation:bounce .45s;
+}
+
+.shake{
+animation:shake .45s;
+}
+
+.fade{
+animation:fadeIn .4s;
+}
+
+/* ---------- Result ---------- */
+
+#result{
+
+display:none;
+
+text-align:center;
+
+margin-top:30px;
+
+animation:fadeIn .7s;
+
+}
+
+#stars{
+
+font-size:42px;
+
+margin:20px 0;
+
+color:#facc15;
+
+}
+
+#result h2{
+
+font-size:38px;
+
+margin:10px;
+
+color:#7c3aed;
+
+}
+
+#result p{
+
+font-size:22px;
+
+font-weight:bold;
+
+}
+/* 結果画面表示中にカードを隠す */
+#result + button {
+    display: block; /* Play Againボタンは表示 */
+}
+/* 星を少し華やかにする */
+#stars {
+    font-size: 50px; /* 星を少し大きく */
+    margin: 20px 0;
+    cursor: pointer;
+    display: inline-block;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Lesson 8 Quiz</h1>
+
+<div class="controls">
+<label>
+<input type="checkbox" id="mode">
+Kanji Mode
+</label>
+<label>
+<input type="checkbox" id="romajiMode" checked>
+Show Romaji
+</label>
+<label>
+<input type="checkbox" id="soundMode" checked>
+Sound Effects
+</label>
+
+</div>
+
+<div class="card">
+
+<div id="question"></div>
+
+<div id="romaji"></div>
+
+</div>
+
+<div class="answers" id="answers"></div>
+
+<div id="message"></div>
+
+<div id="score">
+Score: <span id="correct">0</span> /
+<span id="total">0</span>
+</div>
+<div id="result">
+    <h2>🎉 Great Job! 🎉</h2>   
+    <div id="stars"></div>
+    <p id="finalScore"></p>
+</div>
+
+<p id="finalScore"></p>
+
+</div>
+<button onclick="restart()">Play Again</button>
+
+<script>
+// ===== Sound =====
+
+const audio = new (window.AudioContext || window.webkitAudioContext)();
+
+function playTone(freq,duration){
+
+const osc=audio.createOscillator();
+const gain=audio.createGain();
+
+osc.connect(gain);
+gain.connect(audio.destination);
+
+osc.frequency.value=freq;
+osc.type="triangle";
+
+gain.gain.value=0.15;
+
+osc.start();
+
+gain.gain.exponentialRampToValueAtTime(
+0.0001,
+audio.currentTime+duration
+);
+
+osc.stop(audio.currentTime+duration);
+
+}
+
+function correctSound(){
+
+if(!document.getElementById("soundMode").checked) return;
+
+playTone(700,.08);
+
+setTimeout(()=>{
+playTone(900,.12);
+},90);
+
+}
+
+function wrongSound(){
+
+if(!document.getElementById("soundMode").checked) return;
+
+playTone(180,.25);
+
+}
+
+function finishSound() {
+    if(!document.getElementById("soundMode").checked) return;
+    // 必要であればここにAudioContextを使用した処理を追加
+}
+
+    const data = [
+{ k: "<ruby>親切<rt>しんせつ</rt></ruby>な", r: "しんせつな", m: "shi n se tsu na", a: "kind" },
+    { k: "<ruby>元気<rt>げんき</rt></ruby>な", r: "げんきな", m: "ge n ki na", a: "healthy, cheerful" },
+    { k: "<ruby>暇<rt>ひま</rt></ruby>な", r: "ひまな", m: "hi ma na", a: "free (time)" },
+    { k: "<ruby>有名<rt>ゆうめい</rt></ruby>な", r: "ゆうめいな", m: "yu u me i na", a: "famous" },
+    { k: "<ruby>綺麗<rt>きれい</rt></ruby>な", r: "きれいな", m: "ki re i na", a: "beautiful, clean" },
+    { k: "<ruby>静<rt>しず</rt></ruby>かな", r: "しずかな", m: "shi zu ka na", a: "quiet" },
+    { k: "ハンサムな", r: "ハンサムな", m: "ha n sa mu na", a: "handsome" },
+    { k: "<ruby>賑<rt>にぎ</rt></ruby>やかな", r: "にぎやかな", m: "ni gi ya ka na", a: "lively" },
+    { k: "<ruby>人気<rt>にんき</rt></ruby>な", r: "にんきな", m: "ni n ki na", a: "popular" },
+    { k: "<ruby>新<rt>あたら</rt></ruby>しい", r: "あたらしい", m: "a ta ra shi i", a: "new" },
+    { k: "<ruby>古<rt>ふる</rt></ruby>い", r: "ふるい", m: "fu ru i", a: "old (not of age)" },
+    { k: "<ruby>大<rt>おお</rt></ruby>きい", r: "おおきい", m: "o o ki i", a: "big, large" },
+    { k: "<ruby>小<rt>ちい</rt></ruby>さい", r: "ちいさい", m: "chi i sa i", a: "small, little" },
+    { k: "<ruby>寒<rt>さむ</rt></ruby>い", r: "さむい", m: "sa mu i", a: "cold (weather)" },
+    { k: "<ruby>暑<rt>あつ</rt></ruby>い", r: "あつい", m: "a tsu i", a: "hot (weather)" },
+    { k: "<ruby>良<rt>い</rt></ruby>い", r: "いい/よい", m: "i i / yo i", a: "good" },
+    { k: "<ruby>悪<rt>わる</rt></ruby>い", r: "わるい", m: "wa ru i", a: "bad" },
+    { k: "かっこいい", r: "かっこいい", m: "ka kko i i", a: "cool" },
+    { k: "<ruby>易<rt>やさ</rt></ruby>しい", r: "やさしい", m: "ya sa shi i", a: "easy" },
+    { k: "<ruby>難<rt>むずか</rt></ruby>しい", r: "むずかしい", m: "mu zu ka shi i", a: "difficult" },
+    { k: "<ruby>冷<rt>つめ</rt></ruby>たい", r: "つめたい", m: "tsu me ta i", a: "cold (touch)" },
+    { k: "<ruby>熱<rt>あつ</rt></ruby>い", r: "あつい", m: "a tsu i", a: "hot (touch)" },
+    { k: "<ruby>高<rt>たか</rt></ruby>い", r: "たかい", m: "ta ka i", a: "tall, high" },
+    { k: "<ruby>低<rt>ひく</rt></ruby>い", r: "ひくい", m: "hi ku i", a: "low" },
+    { k: "<ruby>高<rt>たか</rt></ruby>い", r: "たかい", m: "ta ka i", a: "expensive" },
+    { k: "<ruby>安<rt>やす</rt></ruby>い", r: "やすい", m: "ya su i", a: "cheap" },
+    { k: "<ruby>忙<rt>いそが</rt></ruby>しい", r: "いそがしい", m: "i so ga shi i", a: "busy" },
+    { k: "おもしろい", r: "おもしろい", m: "o mo shi ro i", a: "interesting" },
+    { k: "<ruby>楽<rt>たの</rt></ruby>しい", r: "たのしい", m: "ta no shi i", a: "fun" },
+    { k: "おいしい", r: "おいしい", m: "o i shi i", a: "delicious, tasty" },
+    { k: "<ruby>白<rt>しろ</rt></ruby>い", r: "しろい", m: "shi ro i", a: "white" },
+    { k: "<ruby>赤<rt>あか</rt></ruby>い", r: "あかい", m: "a ka i", a: "red" },
+    { k: "<ruby>黒<rt>くろ</rt></ruby>い", r: "くろい", m: "ku ro i", a: "black" },
+    { k: "<ruby>青<rt>あお</rt></ruby>い", r: "あおい", m: "a o i", a: "blue" },
+    { k: "<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>", r: "たべもの", m: "ta be mo no", a: "food" },
+    { k: "<ruby>仕事<rt>しごと</rt></ruby>", r: "しごと", m: "shi go to", a: "work, business" },
+    { k: "<ruby>勉強<rt>べんきょう</rt></ruby>", r: "べんきょう", m: "be n kyo u", a: "study" },
+    { k: "<ruby>桜<rt>さくら</rt></ruby>", r: "さくら", m: "sa ku ra", a: "cherry blossom" },
+    { k: "<ruby>車<rt>くるま</rt></ruby>", r: "くるま", m: "ku ru ma", a: "car" },
+    { k: "<ruby>山<rt>やま</rt></ruby>", r: "やま", m: "ya ma", a: "mountain" },
+    { k: "<ruby>甘<rt>あま</rt></ruby>い", r: "あまい", m: "a ma i", a: "sweet" },
+    { k: "<ruby>辛<rt>から</rt></ruby>い", r: "からい", m: "ka ra i", a: "spicy" },
+    { k: "<ruby>酸<rt>す</rt></ruby>っぱい", r: "すっぱい", m: "su ppa i", a: "sour" },
+    { k: "<ruby>塩<rt>しお</rt></ruby>っぱい", r: "しょっぱい", m: "sho ppa i", a: "salty" },
+    { k: "<ruby>苦<rt>にが</rt></ruby>い", r: "にがい", m: "ni ga i", a: "bitter" },
+    { k: "<ruby>美味<rt>おい</rt></ruby>しい", r: "おいしい", m: "o i shi i", a: "delicious" },
+    { k: "<ruby>不味<rt>まず</rt></ruby>い", r: "まずい", m: "ma zu i", a: "bad-tasting" },
+    { k: "とても", r: "とても", m: "to te mo", a: "very" },
+    { k: "あまり", r: "あまり", m: "a ma ri", a: "not really, not very / used with a negative form" }
+    ];
+
+
+
+let quiz=[];
+let index=0;
+let score=0;
+
+function shuffle(array){
+return [...array].sort(()=>Math.random()-0.5);
+}
+
+function start(){
+
+quiz=shuffle(data);
+
+index=0;
+score=0;
+
+document.querySelector("button").style.display="none";
+
+nextQuestion();
+
+}
+
+function nextQuestion(){
+
+    document.getElementById("message").textContent="";
+    document.getElementById("correct").textContent=score;
+    document.getElementById("total").textContent = index + 1;
+
+    // クイズ終了判定
+    if(index >= quiz.length){
+        finishSound();
+        document.getElementById("question").innerHTML = ""; 
+        document.getElementById("romaji").textContent = "";
+        document.getElementById("question").style.display="none"; 
+        document.querySelector(".card").style.display = "none";
+        document.getElementById("answers").style.display="none";
+        document.getElementById("message").style.display="none";
+        document.getElementById("score").style.display="none";
+        
+        let rate = score / data.length;
+        let stars = rate === 1 ? "⭐⭐⭐⭐⭐" : rate >= 0.8 ? "⭐⭐⭐⭐" : rate >= 0.6 ? "⭐⭐⭐" : rate >= 0.4 ? "⭐⭐" : "⭐";
+
+        document.getElementById("stars").textContent = stars;
+        document.getElementById("finalScore").innerHTML = `${score} / ${data.length}`;
+        document.getElementById("result").style.display = "block";
+        document.querySelector("button").style.display = "block";
+        return;
+    }
+
+    // 問題のセット
+    let current = quiz[index];
+    document.getElementById("question").innerHTML = document.getElementById("mode").checked ? current.k : current.r;
+    document.getElementById("romaji").textContent = document.getElementById("romajiMode").checked ? (current.m || "") : "";
+
+    // 決まった選択肢を表示したいリスト
+    const fixedChoices = {
+        "これ": ["this / near the speaker", "that / near the listener", "that / far away", "which"],
+        "それ": ["this / near the speaker", "that / near the listener", "that / far away", "which"],
+        "あれ": ["this / near the speaker", "that / near the listener", "that / far away", "which"],
+        "どれ": ["this / near the speaker", "that / near the listener", "that / far away", "which"],
+        "この": ["this (+ NOUN) / near the speaker", "that (+ NOUN) / near the listener", "that (+ NOUN) / far away", "which (+ NOUN)"],
+        "その": ["this (+ NOUN) / near the speaker", "that (+ NOUN) / near the listener", "that (+ NOUN) / far away", "which (+ NOUN)"],
+        "あの": ["this (+ NOUN) / near the speaker", "that (+ NOUN) / near the listener", "that (+ NOUN) / far away", "which (+ NOUN)"],
+        "どの": ["this (+ NOUN) / near the speaker", "that (+ NOUN) / near the listener", "that (+ NOUN) / far away", "which (+ NOUN)"]
+    };
+
+    let choices = [];
+    if (fixedChoices[current.k]) {
+        choices = fixedChoices[current.k];
+    } else {
+        choices = [current.a];
+        while(choices.length < 4){
+            let word = data[Math.floor(Math.random() * data.length)].a;
+            if(!choices.includes(word)) choices.push(word);
+        }
+        choices = shuffle(choices);
+    }
+
+    let html = "";
+    choices.forEach(choice => {
+        html += `<div class="answer" onclick="answer(this,'${choice.replace(/'/g,"\\'")}')">${choice}</div>`;
+    });
+    document.getElementById("answers").innerHTML = html;
+}
+function answer(element,choice){
+
+let current=quiz[index];
+
+const card=document.getElementById("question");
+
+document.querySelectorAll(".answer").forEach(btn=>{
+
+btn.onclick=null;
+
+if(btn.textContent===current.a){
+
+btn.classList.add("correct");
+
+}
+
+});
+
+if(choice===current.a){
+
+score++;
+
+correctSound();
+
+card.classList.remove("bounce");
+
+void card.offsetWidth;
+
+card.classList.add("bounce");
+
+document.getElementById("message").textContent="✨ Correct!";
+
+}else{
+
+wrongSound();
+
+element.classList.add("wrong");
+
+card.classList.remove("shake");
+
+void card.offsetWidth;
+
+card.classList.add("shake");
+
+document.getElementById("message").textContent="❌ "+current.a;
+
+}
+
+setTimeout(()=>{
+
+index++;
+
+nextQuestion();
+
+},1000);
+
+}
+
+function restart(){
+
+document.getElementById("question").style.display="flex";
+
+document.getElementById("answers").style.display="grid";
+
+document.getElementById("message").style.display="block";
+
+document.getElementById("score").style.display="block";
+
+document.getElementById("result").style.display="none";
+
+start();
+
+}
+
+document.getElementById("mode")
+.addEventListener("change",nextQuestion);
+
+document.getElementById("romajiMode")
+.addEventListener("change",nextQuestion);
+
+start();
+
+
+</script>
+
+</body>
+</html>
