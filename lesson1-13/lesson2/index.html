@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Minna no Nihongo Lesson 1 Quiz</title>
+<title>Minna no Nihongo Lesson 2 Quiz</title>
 
 <style>
 :root{
@@ -144,15 +144,15 @@ border-color:var(--wrong);
 
 /* スコアエリアの調整 */
 #score {
-    margin-top: 0px; /* 選択肢との間隔を詰める */
+    margin-top: 20px; 
     font-size: 20px;
     font-weight: bold;
     text-align: center; /* 真ん中寄せ */
 }
 
 #message{
-height:30px;
-margin-top:5px; /* メッセージとの間隔も少し詰める */
+height:20px;
+margin-top:10px; 
 font-size:22px;
 font-weight:bold;
 text-align: center;
@@ -306,25 +306,27 @@ Sound Effects
 
 <div id="message"></div>
 
+<!-- スコアエリア -->
 <div id="score">
-Score: <span id="correct">0</span> /
-<span id="total">0</span>
+    Score: <span id="correct">0</span> / <span id="total">0</span>
 </div>
-<!-- 戻るリンクをスコアの下に配置 -->
-<div style="text-align: center; margin-top: 10px;">
-    <a class="back" href="../index.html">← Back to Home</a>
-</div>
+
+
+
 <div id="result">
-    <h2>🎉 Great Job! 🎉</h2>   
-    <div id="stars"></div>
-    <p id="finalScore"></p>
-</div>
+
+<h2>🎉 Great Job! 🎉</h2>
+
+<div id="stars"></div>
 
 <p id="finalScore"></p>
 
 </div>
 <button onclick="restart()">Play Again</button>
 
+<div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+    <a class="back" href="../index.html">← Back to Home</a>
+</div>
 <script>
 // ===== Sound =====
 
