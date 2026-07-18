@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Time Expression Quiz</title>
+
+<style>
+:root{
+--bg-color:#f5f3ff;
+--card-bg:#ffffff;
+--primary:#a78bfa;
+--text-main:#4c1d95;
+--border-color:#f3e8ff;
+--accent-pink:#f172a3;
+--correct:#10b981;
+--wrong:#ef4444;
+}
+
+body{
+font-family:'Nunito',sans-serif;
+background:var(--bg-color);
+display:flex;
+flex-direction:column;
+align-items:center;
+padding: 10px 20px;
+margin:0;
+color:var(--text-main);
+}
+
+h1 {
+    margin-top: 0;     /* h1自体の上の余白を消す */
+    margin-bottom: 5px; /* 下側の余白もさらに詰める */
+    font-size: 28px;   /* 少し小さくするとさらにスッキリします */
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* 左端に寄せる */
+    margin: 0 auto 15px auto; /* 画面中央に配置 */
+    width: 180px; /* 全体の幅を固定して、ラベルの開始位置を揃える */
+}
+
+.controls label {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* チェックボックスと文字の間隔 */
+    text-align: left;
+}
+/* 問題カードはそのままに */
+.card {
+    background-color: var(--card-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 18px;
+    padding: 20px;
+    width: 90%;
+    max-width: 280px;
+    margin: 0 auto 10px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 選択肢ボタンを小さくして見栄えを整える */
+.answers {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px; /* ボタン同士の隙間を詰める */
+    width: 90%;
+    max-width: 300px; /* カードより少し幅を狭くする */
+    margin: 0 auto 10px auto;
+}
+
+.answer {
+    padding: 10px 15px;
+    font-size: 16px;
+    font-weight: bold; /* ここを太字に設定 */
+    border-width: 2px;
+    border-style: solid; /* 枠線が消えないよう念のため指定 */
+    border-color: var(--border-color);
+    border-radius: 18px;
+    text-align: center;
+    background: white;
+    cursor: pointer;
+    transition: .2s;
+}
+
+/* ルビの色 */
+ruby rt {
+    color: #8b5cf6;
+    font-size: 0.5em;
+    font-weight: bold;
+}
+#question{
+font-size:34px;
+font-weight:bold;
+}
+
+#romaji{
+
+margin-top:15px;
+
+padding-top:12px;
+
+width:80%;
+
+border-top:2px solid #ece8ff;
+
+font-size:18px;
+
+font-weight:normal;
+
+letter-spacing:2px;
+
+color:#8b7fbf;
+
+text-align:center;
+
+}
+
+.answer{
+padding:14px;
+font-size:18px;
+background:white;
+border:3px solid var(--border-color);
+border-radius:18px;
+cursor:pointer;
+transition:.2s;
+}
+
+.answer:hover{
+transform:scale(1.02);
+}
+
+.correct{
+background:#d1fae5;
+border-color:var(--correct);
+}
+
+.wrong{
+background:#fee2e2;
+border-color:var(--wrong);
+}
+
+/* スコアエリアの調整 */
+#score {
+    margin-top: 30px; /* 選択肢との間隔を詰める */
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center; /* 真ん中寄せ */
+}
+
+#message {
+    height: 40px;          /* 少し高さを確保して文字が切れないように */
+    margin-top: 15px;      /* 他の要素との間隔を確保 */
+    font-size: 26px;       /* 文字を大きく */
+    font-weight: 800;      /* より太く */
+    text-align: center;
+    transition: color 0.3s ease;
+}
+/* 既存の #message はそのままにして、以下を追記してください */
+
+.correct-text {
+    color: #10b981 !important; /* 緑色 */
+    font-size: 26px !important;
+    font-weight: 800 !important;
+}
+
+.wrong-text {
+    color: #ef4444 !important; /* 赤色 */
+    font-size: 26px !important;
+    font-weight: 800 !important;
+}
+
+/* 正解時の色を強調 */
+.correct-text {
+    color: var(--correct); /* 緑系 */
+}
+
+/* 不正解時の色を強調 */
+.wrong-text {
+    color: var(--wrong);   /* 赤系 */
+}
+
+button {
+    margin-top: 25px;
+    padding: 12px 30px;
+    font-size: 18px;
+    font-weight: bold; /* ここを太字に設定 */
+    background: #818cf8;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    display: none;
+    transition: transform 0.2s; /* おまけで軽く動く演出 */
+}
+
+button:hover {
+    transform: scale(1.05); /* ホバー時に少し大きく */
+}
+/* ---------- Animation ---------- */
+
+@keyframes bounce{
+0%{transform:scale(1);}
+35%{transform:scale(1.08);}
+60%{transform:scale(.95);}
+100%{transform:scale(1);}
+}
+
+@keyframes shake{
+0%{transform:translateX(0);}
+20%{transform:translateX(-8px);}
+40%{transform:translateX(8px);}
+60%{transform:translateX(-8px);}
+80%{transform:translateX(8px);}
+100%{transform:translateX(0);}
+}
+
+@keyframes fadeIn{
+
+from{
+opacity:0;
+transform:translateY(15px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+.bounce{
+animation:bounce .45s;
+}
+
+.shake{
+animation:shake .45s;
+}
+
+.fade{
+animation:fadeIn .4s;
+}
+
+/* ---------- Result ---------- */
+
+
+
+#stars{
+
+font-size:30px;
+
+margin:20px 0;
+
+color:#facc15;
+
+}
+
+#result h2{
+
+font-size:38px;
+
+margin:10px;
+
+color:#7c3aed;
+
+}
+
+#result p{
+
+font-size:22px;
+
+font-weight:bold;
+
+}
+/* 結果画面表示中にカードを隠す */
+#result + button {
+    display: block; /* Play Againボタンは表示 */
+}
+/* 星を少し華やかにする */
+#stars {
+    font-size: 50px; /* 星を少し大きく */
+    margin: 20px 0;
+    cursor: pointer;
+    display: inline-block;
+}
+
+/* Back to Home リンクのスタイル */
+.back-link {
+    display: block;
+    margin-top: 15px;
+    color: var(--text-main);
+    font-weight: bold;
+    text-decoration: none;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🌟 Time Expression 🌟</h1>
+
+<div class="controls">
+<label>
+<input type="checkbox" id="mode">
+Kanji Mode
+</label>
+<label>
+<input type="checkbox" id="romajiMode" checked>
+Show Romaji
+</label>
+<label>
+<input type="checkbox" id="soundMode" checked>
+Sound Effects
+</label>
+
+</div>
+
+<div class="card">
+
+<div id="question"></div>
+
+<div id="romaji"></div>
+
+</div>
+
+<div class="answers" id="answers"></div>
+
+<div id="message"></div>
+
+<!-- スコアエリア -->
+<div id="score">
+    Score: <span id="correct">0</span> / <span id="total">0</span>
+</div>
+
+
+
+<div id="result">
+    <h2>🎉 Great Job! 🎉</h2>
+    <div id="stars"></div>
+    <p id="finalScore" style="font-size: 24px; font-weight: bold;"></p>
+</div>
+<button onclick="restart()">Play Again</button>
+<!-- 戻るリンクをスコアの下に配置 -->
+<div style="text-align: center; margin-top: 10px;">
+    <a class="back" href="../index.html">← Back to Home</a>
+</div>
+
+<script>
+// ===== Sound =====
+
+const audio = new (window.AudioContext || window.webkitAudioContext)();
+
+function playTone(freq,duration){
+
+const osc=audio.createOscillator();
+const gain=audio.createGain();
+
+osc.connect(gain);
+gain.connect(audio.destination);
+
+osc.frequency.value=freq;
+osc.type="triangle";
+
+gain.gain.value=0.15;
+
+osc.start();
+
+gain.gain.exponentialRampToValueAtTime(
+0.0001,
+audio.currentTime+duration
+);
+
+osc.stop(audio.currentTime+duration);
+
+}
+
+function correctSound(){
+
+if(!document.getElementById("soundMode").checked) return;
+
+playTone(700,.08);
+
+setTimeout(()=>{
+playTone(900,.12);
+},90);
+
+}
+
+function wrongSound(){
+
+if(!document.getElementById("soundMode").checked) return;
+
+playTone(180,.25);
+
+}
+
+function finishSound() {
+    if(!document.getElementById("soundMode").checked) return;
+    // 必要であればここにAudioContextを使用した処理を追加
+}
+const data = [
+    { k: "<ruby>一昨日<rt>おととい</rt></ruby>", r: "おととい", m: "o to to i", a: "the day before yesterday", c: ["the day before yesterday", "yesterday", "the day after tomorrow", "today"] },
+    { k: "<ruby>一昨日<rt>おととい</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>", r: "おとといのあさ", m: "o to to i no a sa", a: "the morning before last", c: ["the morning before last", "yesterday morning", "this morning", "tomorrow morning"] },
+    { k: "<ruby>一昨日<rt>おととい</rt></ruby>の<ruby>晩<rt>ばん</rt></ruby>", r: "おとといのばん", m: "o to to i no ba n", a: "the night before last", c: ["the night before last", "last night", "tonight", "tomorrow night"] },
+    { k: "<ruby>昨日<rt>きのう</rt></ruby>", r: "きのう", m: "ki no u", a: "yesterday", c: ["yesterday", "the day before yesterday", "today", "tomorrow"] },
+    { k: "<ruby>昨日<rt>きのう</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>", r: "きのうのあさ", m: "ki no u no a sa", a: "yesterday morning", c: ["yesterday morning", "the morning before last", "this morning", "tomorrow morning"] },
+    { k: "<ruby>昨日<rt>きのう</rt></ruby>の<ruby>晩<rt>ばん</rt></ruby>", r: "きのうのばん", m: "ki no u no ba n", a: "last night", c: ["last night", "the night before last", "tonight", "tomorrow night"] },
+    { k: "<ruby>今日<rt>きょう</rt></ruby>", r: "きょう", m: "kyo u", a: "today", c: ["today", "yesterday", "tomorrow", "every day"] },
+    { k: "<ruby>今朝<rt>けさ</rt></ruby>", r: "けさ", m: "ke sa", a: "this morning", c: ["this morning", "yesterday morning", "tomorrow morning", "every morning"] },
+    { k: "<ruby>今晩<rt>こんばん</rt></ruby>", r: "こんばん", m: "ko n ba n", a: "tonight", c: ["tonight", "last night", "tomorrow night", "every night"] },
+    { k: "<ruby>明日<rt>あした</rt></ruby>", r: "あした", m: "a shi ta", a: "tomorrow", c: ["tomorrow", "yesterday", "the day after tomorrow", "today"] },
+    { k: "<ruby>明日<rt>あした</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>", r: "あしたのあさ", m: "a shi ta no a sa", a: "tomorrow morning", c: ["tomorrow morning", "yesterday morning", "this morning", "the morning after next"] },
+    { k: "<ruby>明日<rt>あした</rt></ruby>の<ruby>晩<rt>ばん</rt></ruby>", r: "あしたのばん", m: "a shi ta no ba n", a: "tomorrow night", c: ["tomorrow night", "last night", "tonight", "the night after next"] },
+    { k: "<ruby>明後日<rt>あさって</rt></ruby>", r: "あさって", m: "a sa tte", a: "the day after tomorrow", c: ["the day after tomorrow", "yesterday", "tomorrow", "the day before yesterday"] },
+    { k: "<ruby>明後日<rt>あさって</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>", r: "あさってのあさ", m: "a sa tte no a sa", a: "the morning after next", c: ["the morning after next", "yesterday morning", "this morning", "tomorrow morning"] },
+    { k: "<ruby>明後日<rt>あさって</rt></ruby>の<ruby>晩<rt>ばん</rt></ruby>", r: "あさってのばん", m: "a sa tte no ba n", a: "the night after next", c: ["the night after next", "last night", "tonight", "tomorrow night"] },
+    { k: "<ruby>毎日<rt>まいにち</rt></ruby>", r: "まいにち", m: "ma i ni chi", a: "every day", c: ["every day", "today", "yesterday", "every week"] },
+    { k: "<ruby>毎朝<rt>まいあさ</rt></ruby>", r: "まいあさ", m: "ma i a sa", a: "every morning", c: ["every morning", "this morning", "yesterday morning", "every night"] },
+    { k: "<ruby>毎晩<rt>まいばん</rt></ruby>", r: "まいばん", m: "ma i ba n", a: "every night", c: ["every night", "tonight", "last night", "every morning"] },
+    { k: "<ruby>先々週<rt>せんせんしゅう</rt></ruby>", r: "せんせんしゅう", m: "se n se n shu u", a: "the week before last", c: ["the week before last", "last week", "this week", "next week"] },
+    { k: "<ruby>先々月<rt>せんせんげつ</rt></ruby>", r: "せんせんげつ", m: "se n se n ge tsu", a: "the month before last", c: ["the month before last", "last month", "this month", "next month"] },
+    { k: "<ruby>一昨年<rt>おととし</rt></ruby>", r: "おととし", m: "o to to shi", a: "the year before last", c: ["the year before last", "last year", "this year", "next year"] },
+    { k: "<ruby>先週<rt>せんしゅう</rt></ruby>", r: "せんしゅう", m: "se n shu u", a: "last week", c: ["last week", "the week before last", "this week", "next week"] },
+    { k: "<ruby>先月<rt>せんげつ</rt></ruby>", r: "せんげつ", m: "se n ge tsu", a: "last month", c: ["last month", "the month before last", "this month", "next month"] },
+    { k: "<ruby>去年<rt>きょねん</rt></ruby>", r: "きょねん", m: "kyo ne n", a: "last year", c: ["last year", "the year before last", "this year", "next year"] },
+    { k: "<ruby>今週<rt>こんしゅう</rt></ruby>", r: "こんしゅう", m: "ko n shu u", a: "this week", c: ["this week", "last week", "next week", "every week"] },
+    { k: "<ruby>今月<rt>こんげつ</rt></ruby>", r: "こんげつ", m: "ko n ge tsu", a: "this month", c: ["this month", "last month", "next month", "every month"] },
+    { k: "<ruby>今年<rt>ことし</rt></ruby>", r: "ことし", m: "ko to shi", a: "this year", c: ["this year", "last year", "next year", "every year"] },
+    { k: "<ruby>来週<rt>らいしゅう</rt></ruby>", r: "らいしゅう", m: "ra i shu u", a: "next week", c: ["next week", "last week", "this week", "the week after next"] },
+    { k: "<ruby>来月<rt>らいげつ</rt></ruby>", r: "らいげつ", m: "ra i ge tsu", a: "next month", c: ["next month", "last month", "this month", "the month after next"] },
+    { k: "<ruby>来年<rt>らいねん</rt></ruby>", r: "らいねん", m: "ra i ne n", a: "next year", c: ["next year", "last year", "this year", "the year after next"] },
+    { k: "<ruby>再来週<rt>さらいしゅう</rt></ruby>", r: "さらいしゅう", m: "sa ra i shu u", a: "the week after next", c: ["the week after next", "next week", "this week", "last week"] },
+    { k: "<ruby>再来月<rt>さらいげつ</rt></ruby>", r: "さらいげつ", m: "sa ra i ge tsu", a: "the month after next", c: ["the month after next", "next month", "this month", "last month"] },
+    { k: "<ruby>再来年<rt>さらいねん</rt></ruby>", r: "さらいねん", m: "sa ra i ne n", a: "the year after next", c: ["the year after next", "next year", "this year", "last year"] },
+    { k: "<ruby>毎週<rt>まいしゅう</rt></ruby>", r: "まいしゅう", m: "ma i shu u", a: "every week", c: ["every week", "this week", "last week", "every month"] },
+    { k: "<ruby>毎月<rt>まいつき</rt></ruby>", r: "まいつき", m: "ma i tsu ki", a: "every month", c: ["every month", "this month", "last month", "every year"] },
+    { k: "<ruby>毎年<rt>まいとし</rt></ruby>", r: "まいとし", m: "ma i to shi", a: "every year", c: ["every year", "this year", "last year", "every month"] }
+];
+
+let quiz=[];
+let index=0;
+let score=0;
+
+function shuffle(array){
+return [...array].sort(()=>Math.random()-0.5);
+}
+
+function start(){
+
+quiz=shuffle(data);
+
+index=0;
+score=0;
+
+document.querySelector("button").style.display="none";
+
+nextQuestion();
+
+}
+
+function nextQuestion(){
+document.getElementById("result").style.display = "none";
+
+document.getElementById("correct").textContent=score;
+document.getElementById("total").textContent = index + 1;
+
+if(index>=quiz.length){
+
+    finishSound();
+
+    document.getElementById("question").innerHTML = ""; 
+    document.getElementById("romaji").textContent = "";
+    document.getElementById("question").style.display="none"; 
+    document.querySelector(".card").style.display = "none";
+
+    document.getElementById("answers").style.display="none";
+
+    document.getElementById("message").style.display="none";
+
+    document.getElementById("score").style.display="none";
+    
+let rate=score/data.length;
+
+let stars="⭐";
+
+if(rate===1){
+
+stars="⭐⭐⭐⭐⭐";
+
+}else if(rate>=0.8){
+
+stars="⭐⭐⭐⭐";
+
+}else if(rate>=0.6){
+
+stars="⭐⭐⭐";
+
+}else if(rate>=0.4){
+
+stars="⭐⭐";
+
+}
+
+document.getElementById("stars").textContent=stars;
+
+document.getElementById("finalScore").innerHTML=
+`${score} / ${data.length}`;
+
+document.getElementById("result").style.display="block";
+
+document.querySelector("button").style.display="block";
+
+return;
+
+}
+
+let current=quiz[index];
+
+document.getElementById("question").innerHTML=
+document.getElementById("mode").checked
+?current.k
+:current.r;
+document.getElementById("romaji").textContent =
+document.getElementById("romajiMode").checked
+? (current.m || "")
+: "";
+
+let choices = current.c; 
+choices = shuffle(choices); 
+
+let html="";
+
+choices.forEach(choice=>{
+
+html+=`<div class="answer"
+onclick="answer(this,'${choice.replace(/'/g,"\\'")}')">${choice}</div>`;
+
+});
+
+document.getElementById("answers").innerHTML=html;
+
+}
+
+function answer(element,choice){
+
+let current=quiz[index];
+
+const card=document.getElementById("question");
+
+document.querySelectorAll(".answer").forEach(btn=>{
+
+btn.onclick=null;
+
+if(btn.textContent===current.a){
+
+btn.classList.add("correct");
+
+}
+
+});
+
+if(choice===current.a){
+
+score++;
+
+correctSound();
+
+card.classList.remove("bounce");
+
+void card.offsetWidth;
+
+card.classList.add("bounce");
+
+document.getElementById("message").textContent="✨ Correct!";
+
+}else{
+
+wrongSound();
+
+element.classList.add("wrong");
+
+card.classList.remove("shake");
+
+void card.offsetWidth;
+
+card.classList.add("shake");
+
+document.getElementById("message").textContent="❌ "+current.a;
+
+}
+
+setTimeout(()=>{
+
+index++;
+
+nextQuestion();
+
+},1000);
+
+}
+
+function restart(){
+
+document.getElementById("question").style.display="flex";
+
+document.getElementById("answers").style.display="grid";
+
+document.getElementById("message").style.display="block";
+
+document.getElementById("score").style.display="block";
+
+document.getElementById("result").style.display="none";
+
+start();
+
+}
+
+document.getElementById("mode")
+.addEventListener("change",nextQuestion);
+
+document.getElementById("romajiMode")
+.addEventListener("change",nextQuestion);
+
+start();
+
+
+</script>
+
+</body>
+</html>
