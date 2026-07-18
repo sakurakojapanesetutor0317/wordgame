@@ -28,9 +28,9 @@ color:var(--text-main);
 }
 
 h1 {
-    margin-top: 10;     
-    margin-bottom: 5px; 
-    font-size: 28px;   
+    margin-top: 0;     /* h1自体の上の余白を消す */
+    margin-bottom: 5px; /* 下側の余白もさらに詰める */
+    font-size: 28px;   /* 少し小さくするとさらにスッキリします */
 }
 
 .controls {
@@ -144,18 +144,42 @@ border-color:var(--wrong);
 
 /* スコアエリアの調整 */
 #score {
-    margin-top: 20px; 
+    margin-top: 30px; /* 選択肢との間隔を詰める */
     font-size: 20px;
     font-weight: bold;
     text-align: center; /* 真ん中寄せ */
 }
 
-#message{
-height:20px;
-margin-top:10px; 
-font-size:22px;
-font-weight:bold;
-text-align: center;
+#message {
+    height: 40px;          /* 少し高さを確保して文字が切れないように */
+    margin-top: 15px;      /* 他の要素との間隔を確保 */
+    font-size: 26px;       /* 文字を大きく */
+    font-weight: 800;      /* より太く */
+    text-align: center;
+    transition: color 0.3s ease;
+}
+/* 既存の #message はそのままにして、以下を追記してください */
+
+.correct-text {
+    color: #10b981 !important; /* 緑色 */
+    font-size: 26px !important;
+    font-weight: 800 !important;
+}
+
+.wrong-text {
+    color: #ef4444 !important; /* 赤色 */
+    font-size: 26px !important;
+    font-weight: 800 !important;
+}
+
+/* 正解時の色を強調 */
+.correct-text {
+    color: var(--correct); /* 緑系 */
+}
+
+/* 不正解時の色を強調 */
+.wrong-text {
+    color: var(--wrong);   /* 赤系 */
 }
 
 button {
@@ -221,21 +245,11 @@ animation:fadeIn .4s;
 
 /* ---------- Result ---------- */
 
-#result{
 
-display:none;
-
-text-align:center;
-
-margin-top:30px;
-
-animation:fadeIn .7s;
-
-}
 
 #stars{
 
-font-size:42px;
+font-size:30px;
 
 margin:20px 0;
 
@@ -270,6 +284,15 @@ font-weight:bold;
     margin: 20px 0;
     cursor: pointer;
     display: inline-block;
+}
+
+/* Back to Home リンクのスタイル */
+.back-link {
+    display: block;
+    margin-top: 15px;
+    color: var(--text-main);
+    font-weight: bold;
+    text-decoration: none;
 }
 </style>
 </head>
@@ -314,19 +337,16 @@ Sound Effects
 
 
 <div id="result">
-
-<h2>🎉 Great Job! 🎉</h2>
-
-<div id="stars"></div>
-
-<p id="finalScore"></p>
-
+    <h2>🎉 Great Job! 🎉</h2>
+    <div id="stars"></div>
+    <p id="finalScore" style="font-size: 24px; font-weight: bold;"></p>
 </div>
 <button onclick="restart()">Play Again</button>
-
-<div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+<!-- 戻るリンクをスコアの下に配置 -->
+<div style="text-align: center; margin-top: 10px;">
     <a class="back" href="../index.html">← Back to Home</a>
 </div>
+
 <script>
 // ===== Sound =====
 
@@ -380,6 +400,7 @@ function finishSound() {
     if(!document.getElementById("soundMode").checked) return;
     // 必要であればここにAudioContextを使用した処理を追加
 }
+
 const data = [
     { k: "<ruby>朝<rt>あさ</rt></ruby>", r: "あさ", m: "a sa", a: "morning" },
     { k: "<ruby>昼<rt>ひる</rt></ruby>", r: "ひる", m: "hi ru", a: "daytime, noon" },
@@ -428,73 +449,7 @@ nextQuestion();
 }
 
 function nextQuestion(){
-
-    document.getElementById("message").textContent="";
-    document.getElementById("correct").textContent=score;
-    document.getElementById("total").textContent = index + 1;
-
-    // クイズ終了判定
-    if(index >= quiz.length){
-        finishSound();
-        document.getElementById("question").innerHTML = ""; 
-        document.getElementById("romaji").textContent = "";
-        document.getElementById("question").style.display="none"; 
-        document.querySelector(".card").style.display = "none";
-        document.getElementById("answers").style.display="none";
-        document.getElementById("message").style.display="none";
-        document.getElementById("score").style.display="none";
-        
-        let rate = score / data.length;
-        let stars = rate === 1 ? "⭐⭐⭐⭐⭐" : rate >= 0.8 ? "⭐⭐⭐⭐" : rate >= 0.6 ? "⭐⭐⭐" : rate >= 0.4 ? "⭐⭐" : "⭐";
-
-        document.getElementById("stars").textContent = stars;
-        document.getElementById("finalScore").innerHTML = `${score} / ${data.length}`;
-        document.getElementById("result").style.display = "block";
-        document.querySelector("button").style.display = "block";
-        return;
-    }
-
-    // 問題のセット
-    let current = quiz[index];
-    document.getElementById("question").innerHTML = document.getElementById("mode").checked ? current.k : current.r;
-    document.getElementById("romaji").textContent = document.getElementById("romajiMode").checked ? (current.m || "") : "";
-
-    // 決まった選択肢を表示したいリスト
-    const fixedChoices = {
-        "これ": ["this / near the speaker", "that / near the listener", "that / far away", "which"],
-        "それ": ["this / near the speaker", "that / near the listener", "that / far away", "which"],
-        "あれ": ["this / near the speaker", "that / near the listener", "that / far away", "which"],
-        "どれ": ["this / near the speaker", "that / near the listener", "that / far away", "which"],
-        "この": ["this (+ NOUN) / near the speaker", "that (+ NOUN) / near the listener", "that (+ NOUN) / far away", "which (+ NOUN)"],
-        "その": ["this (+ NOUN) / near the speaker", "that (+ NOUN) / near the listener", "that (+ NOUN) / far away", "which (+ NOUN)"],
-        "あの": ["this (+ NOUN) / near the speaker", "that (+ NOUN) / near the listener", "that (+ NOUN) / far away", "which (+ NOUN)"],
-        "どの": ["this (+ NOUN) / near the speaker", "that (+ NOUN) / near the listener", "that (+ NOUN) / far away", "which (+ NOUN)"]
-    };
-
-let quiz=[];
-let index=0;
-let score=0;
-
-function shuffle(array){
-return [...array].sort(()=>Math.random()-0.5);
-}
-
-function start(){
-
-quiz=shuffle(data);
-
-index=0;
-score=0;
-
-document.querySelector("button").style.display="none";
-
-nextQuestion();
-
-}
-
-function nextQuestion(){
-
-document.getElementById("message").textContent="";
+document.getElementById("result").style.display = "none";
 
 document.getElementById("correct").textContent=score;
 document.getElementById("total").textContent = index + 1;
@@ -513,8 +468,6 @@ if(index>=quiz.length){
     document.getElementById("message").style.display="none";
 
     document.getElementById("score").style.display="none";
-    document.querySelector(".controls").style.display = "none";
-    document.querySelector("h1").style.display = "none"; 
     
 let rate=score/data.length;
 
