@@ -308,7 +308,7 @@ Sound Effects
 
 <!-- スコアエリア -->
 <div id="score">
-    Score: <span id="correct">0</span> / <span id="total">0</span>
+   <span id="correct">0</span> / <span id="total">0</span>
 </div>
 
 
@@ -459,8 +459,9 @@ function nextQuestion(){
 
 document.getElementById("message").textContent="";
 
-document.getElementById("correct").textContent=score;
-document.getElementById("total").textContent = index + 1;
+    // スコア部分を「現在の問目 / トータルの問題数」に変更[cite: 1]
+    document.getElementById("correct").textContent = index + 1;
+    document.getElementById("total").textContent = quiz.length;
 
 if(index>=quiz.length){
 
