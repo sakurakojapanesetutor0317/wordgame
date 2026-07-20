@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nai-form Quiz</title>
+
+<style>
+
+:root{
+--bg-color:#f5f3ff;
+--card-bg:#ffffff;
+--primary:#a78bfa;
+--text-main:#4c1d95;
+--border-color:#f3e8ff;
+}
+
+
+body{
+
+font-family:'Nunito',sans-serif;
+
+background:var(--bg-color);
+
+display:flex;
+
+flex-direction:column;
+
+align-items:center;
+
+justify-content:center;
+
+min-height:100vh;
+
+margin:0;
+
+padding:20px;
+
+color:var(--text-main);
+
+}
+
+
+h1{
+
+font-size:32px;
+
+margin-bottom:10px;
+
+}
+
+
+.subtitle{
+
+font-size:18px;
+
+margin-bottom:30px;
+
+color:#8b5cf6;
+
+font-weight:bold;
+
+}
+
+
+.levels{
+
+display:grid;
+
+grid-template-columns:repeat(2, 1fr);
+
+gap:20px;
+
+max-width:500px;
+
+width:100%;
+
+}
+
+
+.level-card{
+
+background:white;
+
+border:4px solid var(--border-color);
+
+border-radius:25px;
+
+padding:25px;
+
+text-align:center;
+
+cursor:pointer;
+
+transition:.3s;
+
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+}
+
+
+.level-card:hover{
+
+transform:translateY(-8px) scale(1.03);
+
+}
+
+
+.icon{
+
+font-size:45px;
+
+}
+
+
+.level{
+
+font-size:28px;
+
+font-weight:bold;
+
+margin:10px;
+
+}
+
+
+.description{
+
+font-size:16px;
+
+color:#64748b;
+
+}
+
+
+/* 色分け */
+
+.n5{
+border-color:#86efac;
+}
+
+.n4{
+border-color:#93c5fd;
+}
+
+.n3{
+border-color:#fde047;
+}
+
+.n2{
+border-color:#fdba74;
+}
+
+.n1{
+border-color:#fca5a5;
+}
+
+
+.home{
+
+margin-top:35px;
+
+padding:12px 30px;
+
+background:#818cf8;
+
+color:white;
+
+border-radius:20px;
+
+text-decoration:none;
+
+font-weight:bold;
+
+}
+
+
+@media(max-width:600px){
+
+.levels{
+
+grid-template-columns:1fr;
+
+}
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<h1>🎮 Nai-form Quiz</h1>
+
+<div class="subtitle">
+Choose your JLPT Level
+</div>
+
+
+<div class="levels">
+
+
+<div class="level-card n5" onclick="location.href='n5.html'">
+
+<div class="icon">🌱</div>
+
+<div class="level">N5</div>
+
+<div class="description">
+Basic Verbs
+</div>
+
+</div>
+
+
+
+<div class="level-card n4" onclick="location.href='n4.html'">
+
+<div class="icon">🌿</div>
+
+<div class="level">N4</div>
+
+<div class="description">
+Elementary Verbs
+</div>
+
+</div>
+
+
+
+<div class="level-card n3" onclick="location.href='n3.html'">
+
+<div class="icon">🌳</div>
+
+<div class="level">N3</div>
+
+<div class="description">
+Intermediate Verbs
+</div>
+
+</div>
+
+
+
+<div class="level-card n2" onclick="location.href='n2.html'">
+
+<div class="icon">🔥</div>
+
+<div class="level">N2</div>
+
+<div class="description">
+Upper Intermediate
+</div>
+
+</div>
+
+
+
+<div class="level-card n1" onclick="location.href='n1.html'">
+
+<div class="icon">👑</div>
+
+<div class="level">N1</div>
+
+<div class="description">
+Advanced Verbs
+</div>
+
+</div>
+
+
+</div>
+
+
+<a class="home" href="index.html">
+← Back to Home
+</a>
+
+
+</body>
+
+</html>
