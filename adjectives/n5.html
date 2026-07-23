@@ -1,147 +1,219 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>JLPT N5 Adjectives</title>
+<title>JLPT N5 Adjective Games</title>
 
 <style>
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
+:root{
+--bg-color:#f5f3ff;
+--card-bg:#ffffff;
+--primary:#a78bfa;
+--text-main:#4c1d95;
+--border-color:#f3e8ff;
 }
 
 body{
 
-    background:linear-gradient(135deg,#9be7ff,#b2f7ef,#fff6b7);
-    min-height:100vh;
+font-family:'Nunito',sans-serif;
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:30px;
+background:var(--bg-color);
 
-}
+display:flex;
 
-.container{
+flex-direction:column;
 
-    width:100%;
-    max-width:700px;
+align-items:center;
+
+justify-content:center;
+
+min-height:100vh;
+
+margin:0;
+
+padding:20px;
+
+color:var(--text-main);
 
 }
 
 h1{
 
-    text-align:center;
-    color:#333;
-    font-size:42px;
-    margin-bottom:10px;
+font-size:32px;
+
+margin-bottom:10px;
+
+text-align:center;
 
 }
 
 .subtitle{
 
-    text-align:center;
-    color:#555;
-    font-size:20px;
-    margin-bottom:40px;
+font-size:18px;
+
+margin-bottom:30px;
+
+color:#8b5cf6;
+
+font-weight:bold;
+
+text-align:center;
 
 }
 
-.card{
+.games{
 
-    background:white;
-    border-radius:25px;
-    padding:25px;
+display:grid;
 
-    margin-bottom:25px;
+grid-template-columns:1fr;
 
-    text-decoration:none;
-    color:#333;
+gap:20px;
 
-    display:block;
+max-width:550px;
 
-    transition:.25s;
-
-    box-shadow:0 10px 25px rgba(0,0,0,.15);
+width:100%;
 
 }
 
-.card:hover{
+.game-card{
 
-    transform:translateY(-8px) scale(1.02);
+background:white;
+
+border:4px solid var(--border-color);
+
+border-radius:25px;
+
+padding:25px;
+
+text-align:center;
+
+cursor:pointer;
+
+transition:.3s;
+
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+}
+
+.game-card:hover{
+
+transform:translateY(-8px) scale(1.03);
 
 }
 
 .icon{
 
-    font-size:55px;
-    margin-bottom:10px;
+font-size:55px;
+
+margin-bottom:10px;
 
 }
 
 .title{
 
-    font-size:30px;
-    font-weight:bold;
-    margin-bottom:10px;
+font-size:28px;
+
+font-weight:bold;
+
+margin-bottom:12px;
 
 }
 
 .description{
 
-    font-size:18px;
-    line-height:1.6;
-    color:#666;
+font-size:17px;
+
+color:#64748b;
+
+line-height:1.6;
 
 }
 
-.button{
+.play{
 
-    margin-top:20px;
+margin-top:18px;
 
-    display:inline-block;
+display:inline-block;
 
-    background:#ff6b6b;
-    color:white;
+padding:10px 28px;
 
-    padding:12px 30px;
+background:#8b5cf6;
 
-    border-radius:50px;
+color:white;
 
-    font-weight:bold;
+border-radius:30px;
 
-    font-size:18px;
+font-weight:bold;
+
+font-size:17px;
 
 }
 
-.footer{
+/* 色分け */
 
-    margin-top:30px;
-    text-align:center;
-    color:#444;
+.game1{
+
+border-color:#86efac;
+
+}
+
+.game2{
+
+border-color:#93c5fd;
+
+}
+
+.game3{
+
+border-color:#fdba74;
+
+}
+
+.home{
+
+margin-top:35px;
+
+padding:12px 30px;
+
+background:#818cf8;
+
+color:white;
+
+border-radius:20px;
+
+text-decoration:none;
+
+font-weight:bold;
+
+transition:.3s;
+
+}
+
+.home:hover{
+
+transform:scale(1.05);
 
 }
 
 </style>
 
 </head>
+
 <body>
 
-<div class="container">
-
-<h1>🌸 JLPT N5 Adjectives 🌸</h1>
+<h1>🎮 JLPT N5 Adjective Games</h1>
 
 <div class="subtitle">
 Choose Your Challenge!
 </div>
 
+<div class="games">
 
-<a href="meaning.html" class="card">
+<div class="game-card game1" onclick="location.href='meaning.html'">
 
 <div class="icon">🎯</div>
 
@@ -150,24 +222,20 @@ Meaning Match
 </div>
 
 <div class="description">
-
-Japanese ➜ English
-
+Japanese → English
 <br><br>
-
 Choose the correct English meaning.
-
 </div>
 
-<div class="button">
+<div class="play">
 ▶ PLAY
 </div>
 
-</a>
+</div>
 
 
 
-<a href="present.html" class="card">
+<div class="game-card game2" onclick="location.href='present.html'">
 
 <div class="icon">🍀</div>
 
@@ -176,24 +244,22 @@ Present Form
 </div>
 
 <div class="description">
-
+Present Tense
+<br>
 Positive / Negative
-
 <br><br>
-
 Choose the correct adjective form.
-
 </div>
 
-<div class="button">
+<div class="play">
 ▶ PLAY
 </div>
 
-</a>
+</div>
 
 
 
-<a href="past.html" class="card">
+<div class="game-card game3" onclick="location.href='past.html'">
 
 <div class="icon">🚀</div>
 
@@ -202,31 +268,27 @@ Present & Past
 </div>
 
 <div class="description">
-
 Present / Past
-
 <br>
-
 Positive / Negative
-
 <br><br>
-
 Master all adjective conjugations!
-
 </div>
 
-<div class="button">
+<div class="play">
 ▶ PLAY
 </div>
 
-</a>
-
-<div class="footer">
-
-⭐ 84 Adjectives ⭐
+</div>
 
 </div>
 
+<a class="home" href="index.html">
+← Back to Home
+</a>
+
+</body>
+</html>
 </div>
 
 </body>
