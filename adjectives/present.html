@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Adjective Quiz</title>
+
+<style>
+:root{
+--bg-color:#f5f3ff;
+--card-bg:#ffffff;
+--primary:#a78bfa;
+--text-main:#4c1d95;
+--border-color:#f3e8ff;
+--correct:#10b981;
+--wrong:#ef4444;
+}
+
+body{
+font-family:'Nunito',sans-serif;
+background:var(--bg-color);
+display:flex;
+flex-direction:column;
+align-items:center;
+padding: 10px 20px;
+margin:0;
+color:var(--text-main);
+}
+
+h1 {
+    margin-top: 40px;   
+    margin-bottom: 5px;
+    font-size: 28px;  
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0 auto 15px auto;
+    width: 180px;
+}
+
+.controls label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+}
+
+.quiz-container{
+    width:90%;
+    max-width:400px;
+    margin:0 auto;
+}
+
+.card {
+    background-color: var(--card-bg);
+    border: 3px solid var(--border-color);
+    border-radius: 18px;
+    padding: 20px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto 15px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+#emojiDisplay { 
+    font-size: 40px; 
+    margin-bottom: 5px; 
+}
+
+/* 問題として表示する英単語 */
+#question {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: center;
+    color: #4c1d95;
+}
+
+#groupDisplay {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 10px;
+    padding: 4px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-main);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+#groupDisplay.i-adj {
+    background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+}
+
+#groupDisplay.na-adj {
+    background: linear-gradient(135deg, #bfdbfe, #93c5fd);
+}
+
+#answers{
+    width:100%;
+    max-width: 600px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:10px;
+}
+
+.answer{
+    width:100%;
+    box-sizing:border-box;
+    padding: 14px;
+    font-size: 18px;
+    font-weight: bold;
+    border: 3px solid var(--border-color);
+    border-radius: 18px;
+    text-align: center;
+    background: white;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.answer:hover{
+    transform:scale(1.02);
+}
+
+.correct{
+    background:#d1fae5;
+    border-color:var(--correct);
+}
+
+.wrong{
+    background:#fee2e2;
+    border-color:var(--wrong);
+}
+
+ruby rt {
+    color: #8b5cf6;
+    font-size: 0.5em;
+    font-weight: bold;
+}
+
+#score {
+    margin-top: 10px; 
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#message{
+    height:30px;
+    margin-top:10px; 
+    font-size:22px;
+    font-weight:bold;
+    text-align: center;
+}
+
+button {
+    margin-top: 25px;
+    padding: 12px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    background: #818cf8;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    display: none;
+    transition: transform 0.2s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+#result{
+    display:none;
+    text-align:center;
+    margin-top:30px;
+}
+
+#stars{
+    font-size: 50px;
+    margin: 20px 0;
+    color: #facc15;
+    display: inline-block;
+}
+
+#result h2{
+    font-size:38px;
+    margin:10px;
+    color:#7c3aed;
+}
+
+#result p{
+    font-size:22px;
+    font-weight:bold;
+}
+
+.back {
+    color: #7c3aed;
+    text-decoration: none;
+    font-weight: bold;
+}
+.back:hover {
+    text-decoration: underline;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🌟Adjective Quiz🌟</h1>
+
+<div class="controls">
+<label>
+    <input type="checkbox" id="mode" onchange="updateView()">
+    Kanji Mode
+</label>
+<label>
+    <input type="checkbox" id="romajiMode" checked onchange="updateView()">
+    Show Romaji
+</label>
+<label>
+    <input type="checkbox" id="soundMode" checked>
+    Sound Effects
+</label>
+</div>
+
+<div class="quiz-container">
+    <div class="card">
+        <div id="emojiDisplay"></div>
+        <div id="groupDisplay"></div>
+        <div id="question"></div>
+    </div>
+
+    <div class="answers" id="answers"></div>
+</div>
+
+<div id="message"></div>
+
+<div id="score">
+<span><span id="currentNum">0</span> / <span id="totalNum">0</span></span>
+</div>
+
+<div id="result">
+    <h2>🎉 Great Job! 🎉</h2>   
+    <div id="stars"></div>
+    <p id="finalScore"></p>
+</div>
+
+<button onclick="restart()">Play Again</button>
+
+<div style="text-align: center; margin-top: 30px; margin-bottom: 20px;">
+    <a class="back" href="masu-form/index.html">← Back to Home</a>
+</div>
+
+<script>
+// ===== Sound =====
+const audio = new (window.AudioContext || window.webkitAudioContext)();
+
+function playTone(freq,duration){
+    const osc=audio.createOscillator();
+    const gain=audio.createGain();
+
+    osc.connect(gain);
+    gain.connect(audio.destination);
+
+    osc.frequency.value=freq;
+    osc.type="triangle";
+    gain.gain.value=0.15;
+
+    osc.start();
+    gain.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime+duration);
+    osc.stop(audio.currentTime+duration);
+}
+
+function correctSound(){
+    if(!document.getElementById("soundMode").checked) return;
+    playTone(700,.08);
+    setTimeout(()=>{ playTone(900,.12); },90);
+}
+
+function wrongSound(){
+    if(!document.getElementById("soundMode").checked) return;
+    playTone(180,.25);
+}
+
+// クイズデータ（英語が問題、日本語が選択肢）
+const quizData = [
+{ emoji: "⚠️", en: "dangerous", kanji: "<ruby>危<rt>あぶ</rt></ruby>ない", kana: "あぶない", group: "i-adj", options: ["あぶない", "あかるい", "あつい", "あまい"] },
+{ emoji: "🔴", en: "red", kanji: "<ruby>赤<rt>あか</rt></ruby>い", kana: "あかい", group: "i-adj", options: ["あかい", "あおい", "あかるい", "あつい"] },
+{ emoji: "☀️", en: "bright", kanji: "<ruby>明<rt>あか</rt></ruby>るい", kana: "あかるい", group: "i-adj", options: ["あかるい", "あかい", "あたたかい", "あまい"] },
+{ emoji: "🍬", en: "sweet", kanji: "<ruby>甘<rt>あま</rt></ruby>い", kana: "あまい", group: "i-adj", options: ["あまい", "あかい", "あぶない", "うすい"] },
+{ emoji: "🍋", en: "sour", kanji: "<ruby>酢<rt>す</rt></ruby>っぱい", kana: "すっぱい", group: "i-adj", options: ["すっぱい", "しょっぱい", "きたない", "つめたい"] },
+{ emoji: "🧂", en: "salty", kanji: "<ruby>塩<rt>しょ</rt></ruby>っぱい", kana: "しょっぱい", group: "i-adj", options: ["しょっぱい", "すっぱい", "おそい", "つよい"] },
+{ emoji: "☕", en: "bitter", kanji: "<ruby>苦<rt>にが</rt></ruby>い", kana: "にがい", group: "i-adj", options: ["にがい", "きたない", "みじかい", "おもい"] },
+{ emoji: "🔵", en: "blue", kanji: "<ruby>青<rt>あお</rt></ruby>い", kana: "あおい", group: "i-adj", options: ["あおい", "あかい", "あまい", "まるい"] },
+{ emoji: "✨", en: "new", kanji: "<ruby>新<rt>あたら</rt></ruby>しい", kana: "あたらしい", group: "i-adj", options: ["あたらしい", "おもしろい", "いそがしい", "おいしい"] },
+{ emoji: "🌤", en: "warm", kanji: "<ruby>暖<rt>あたた</rt></ruby>かい", kana: "あたたかい", group: "i-adj", options: ["あたたかい", "あかるい", "つめたい", "おもい"] },
+{ emoji: "♨️", en: "warm (weather/bath)", kanji: "<ruby>温<rt>あたた</rt></ruby>かい", kana: "あたたかい", group: "i-adj", options: ["あたたかい", "あつい", "さむい", "つめたい"] },
+{ emoji: "🧱", en: "thick", kanji: "<ruby>厚<rt>あつ</rt></ruby>い", kana: "あつい", group: "i-adj", options: ["あつい", "あかい", "うすい", "おもい"] },
+{ emoji: "🌞", en: "hot", kanji: "<ruby>暑<rt>あつ</rt></ruby>い", kana: "あつい", group: "i-adj", options: ["あつい", "さむい", "あたたかい", "つめたい"] },
+{ emoji: "🐜", en: "small", kanji: "<ruby>小<rt>ちい</rt></ruby>さい", kana: "ちいさい", group: "i-adj", options: ["ちいさい", "ちかい", "きたない", "おそい"] },
+{ emoji: "📍", en: "near", kanji: "<ruby>近<rt>ちか</rt></ruby>い", kana: "ちかい", group: "i-adj", options: ["ちかい", "ちいさい", "とおい", "きたない"] },
+{ emoji: "🏛️", en: "old", kanji: "<ruby>古<rt>ふる</rt></ruby>い", kana: "ふるい", group: "i-adj", options: ["ふるい", "ふとい", "ほそい", "わるい"] },
+{ emoji: "🫃", en: "fat", kanji: "<ruby>太<rt>ふと</rt></ruby>い", kana: "ふとい", group: "i-adj", options: ["ふとい", "ほそい", "ふるい", "みじかい"] },
+{ emoji: "⏰", en: "early", kanji: "<ruby>早<rt>はや</rt></ruby>い", kana: "はやい", group: "i-adj", options: ["はやい", "おそい", "とおい", "せまい"] },
+{ emoji: "🏃", en: "fast", kanji: "<ruby>速<rt>はや</rt></ruby>い", kana: "はやい", group: "i-adj", options: ["はやい", "おそい", "たかい", "ひくい"] },
+{ emoji: "📉", en: "low", kanji: "<ruby>低<rt>ひく</rt></ruby>い", kana: "ひくい", group: "i-adj", options: ["ひくい", "たかい", "ひろい", "せまい"] },
+{ emoji: "🏞️", en: "spacious", kanji: "<ruby>広<rt>ひろ</rt></ruby>い", kana: "ひろい", group: "i-adj", options: ["ひろい", "せまい", "おおい", "すくない"] },
+{ emoji: "🤲", en: "want", kanji: "<ruby>欲<rt>ほ</rt></ruby>しい", kana: "ほしい", group: "i-adj", options: ["ほしい", "ほそい", "おいしい", "たのしい"] },
+{ emoji: "🧵", en: "thin", kanji: "<ruby>細<rt>ほそ</rt></ruby>い", kana: "ほそい", group: "i-adj", options: ["ほそい", "ふとい", "おもい", "かるい"] },
+{ emoji: "🏃‍♂️", en: "busy", kanji: "<ruby>忙<rt>いそがし</rt></ruby>い", kana: "いそがしい", group: "i-adj", options: ["いそがしい", "たのしい", "むずかしい", "おもしろい"] },
+{ emoji: "🩹", en: "painful", kanji: "<ruby>痛<rt>いた</rt></ruby>い", kana: "いたい", group: "i-adj", options: ["いたい", "きたない", "わるい", "おもい"] },
+{ emoji: "🌶️", en: "spicy", kanji: "<ruby>辛<rt>から</rt></ruby>い", kana: "からい", group: "i-adj", options: ["からい", "かるい", "くらい", "うまい"] },
+{ emoji: "🪶", en: "light", kanji: "<ruby>軽<rt>かる</rt></ruby>い", kana: "かるい", group: "i-adj", options: ["かるい", "おもい", "からい", "くらい"] },
+{ emoji: "🧸", en: "cute", kanji: "<ruby>可愛<rt>かわい</rt></ruby>い", kana: "かわいい", group: "i-adj", options: ["かわいい", "こわい", "きいろい", "きたない"] },
+{ emoji: "💛", en: "yellow", kanji: "<ruby>黄色<rt>きいろ</rt></ruby>い", kana: "きいろい", group: "i-adj", options: ["きいろい", "しろい", "くろい", "あおい"] },
+{ emoji: "🗑️", en: "dirty", kanji: "<ruby>汚<rt>きたな</rt></ruby>い", kana: "きたない", group: "i-adj", options: ["きたない", "あぶない", "にがい", "つまらない"] },
+{ emoji: "🌑", en: "dark", kanji: "<ruby>暗<rt>くら</rt></ruby>い", kana: "くらい", group: "i-adj", options: ["くらい", "からい", "かるい", "くろい"] },
+{ emoji: "⬛", en: "black", kanji: "<ruby>黒<rt>くろ</rt></ruby>い", kana: "くろい", group: "i-adj", options: ["くろい", "しろい", "あおい", "かい"] },
+{ emoji: "⭕", en: "round", kanji: "<ruby>丸<rt>まる</rt></ruby>い", kana: "まるい", group: "i-adj", options: ["まるい", "みじかい", "まずい", "はやい"] },
+{ emoji: "🤢", en: "unpleasant (taste)", kanji: "<ruby>不味<rt>まず</rt></ruby>い", kana: "まずい", group: "i-adj", options: ["まずい", "おいしい", "みじかい", "まるい"] },
+{ emoji: "📏", en: "short", kanji: "<ruby>短<rt>みじか</rt></ruby>い", kana: "みじかい", group: "i-adj", options: ["みじかい", "ながい", "むずかしい", "まずい"] },
+{ emoji: "🧩", en: "difficult", kanji: "<ruby>難<rt>むずか</rt></ruby>しい", kana: "むずかしい", group: "i-adj", options: ["むずかしい", "やさしい", "おもしろい", "めずらしい"] },
+{ emoji: "⏳", en: "long", kanji: "<ruby>長<rt>なが</rt></ruby>い", kana: "ながい", group: "i-adj", options: ["ながい", "みじかい", "おもい", "とおい"] },
+{ emoji: "🍵", en: "lukewarm", kanji: "<ruby>温<rt>ぬる</rt></ruby>い", kana: "ぬるい", group: "i-adj", options: ["ぬるい", "あつい", "つめたい", "まるい"] },
+{ emoji: "🍱", en: "delicious", kanji: "<ruby>美味<rt>おい</rt></ruby>しい", kana: "おいしい", group: "i-adj", options: ["おいしい", "おもしろい", "あたらしい", "いそがしい"] },
+{ emoji: "🪨", en: "heavy", kanji: "<ruby>重<rt>おも</rt></ruby>い", kana: "おもい", group: "i-adj", options: ["おもい", "かるい", "おそい", "おおい"] },
+{ emoji: "💡", en: "interesting", kanji: "<ruby>面白<rt>おもしろ</rt></ruby>い", kana: "おもしろい", group: "i-adj", options: ["おもしろい", "おいしい", "たのしい", "つまらない"] },
+{ emoji: "👥", en: "many", kanji: "<ruby>多<rt>おお</rt></ruby>い", kana: "おおい", group: "i-adj", options: ["おおい", "すくない", "おそい", "おもい"] },
+{ emoji: "🐘", en: "big", kanji: "<ruby>大<rt>おお</rt></ruby>きい", kana: "おおきい", group: "i-adj", options: ["おおきい", "ちいさい", "おおい", "おそい"] },
+{ emoji: "🐢", en: "slow", kanji: "<ruby>遅<rt>おそ</rt></ruby>い", kana: "おそい", group: "i-adj", options: ["おそい", "はやい", "おおい", "おもい"] },
+{ emoji: "❄️", en: "cold", kanji: "<ruby>寒<rt>さむ</rt></ruby>い", kana: "さむい", group: "i-adj", options: ["さむい", "あつい", "すずしい", "せまい"] },
+{ emoji: "📐", en: "narrow", kanji: "<ruby>狭<rt>せま</rt></ruby>い", kana: "せまい", group: "i-adj", options: ["せまい", "ひろい", "さむい", "おもい"] },
+{ emoji: "⬜", en: "white", kanji: "<ruby>白<rt>しろ</rt></ruby>い", kana: "しろい", group: "i-adj", options: ["しろい", "くろい", "あおい", "まるい"] },
+{ emoji: "📉", en: "few", kanji: "<ruby>少<rt>すく</rt></ruby>ない", kana: "すくない", group: "i-adj", options: ["すくない", "おおい", "すずしい", "つよい"] },
+{ emoji: "🍃", en: "cool", kanji: "<ruby>涼<rt>すず</rt></ruby>しい", kana: "すずしい", group: "i-adj", options: ["すずしい", "さむい", "あたたかい", "すくない"] },
+{ emoji: "🏢", en: "expensive / tall", kanji: "<ruby>高<rt>たか</rt></ruby>い", kana: "たかい", group: "i-adj", options: ["たかい", "ひくい", "やすい", "はやい"] },
+{ emoji: "🎡", en: "fun", kanji: "<ruby>楽<rt>たの</rt></ruby>しい", kana: "たのしい", group: "i-adj", options: ["たのしい", "つまらない", "たかい", "ただしい"] },
+{ emoji: "🔭", en: "far", kanji: "<ruby>遠<rt>とお</rt></ruby>い", kana: "とおい", group: "i-adj", options: ["とおい", "ちかい", "おそい", "おおい"] },
+{ emoji: "🥱", en: "boring", kanji: "<ruby>詰<rt>つ</rt></ruby>まらない", kana: "つまらない", group: "i-adj", options: ["つまらない", "たのしい", "おもしろい", "つめたい"] },
+{ emoji: "🧊", en: "cold (touch)", kanji: "<ruby>冷<rt>つめ</rt></ruby>たい", kana: "つめたい", group: "i-adj", options: ["つめたい", "あつい", "ぬるい", "つまらない"] },
+{ emoji: "💪", en: "strong", kanji: "<ruby>強<rt>つよ</rt></ruby>い", kana: "つよい", group: "i-adj", options: ["つよい", "よわい", "とおい", "せまい"] },
+{ emoji: "📢", en: "noisy", kanji: "<ruby>五月蠅<rt>うるさ</rt></ruby>い", kana: "うるさい", group: "i-adj", options: ["うるさい", "おそい", "うすい", "わかい"] },
+{ emoji: "💧", en: "thin (liquid/strength)", kanji: "<ruby>薄<rt>うす</rt></ruby>い", kana: "うすい", group: "i-adj", options: ["うすい", "あつい", "おもい", "うるさい"] },
+{ emoji: "🌱", en: "young", kanji: "<ruby>若<rt>わか</rt></ruby>い", kana: "わかい", group: "i-adj", options: ["わかい", "わるい", "ながい", "はやい"] },
+{ emoji: "❌", en: "bad", kanji: "<ruby>悪<rt>わる</rt></ruby>い", kana: "わるい", group: "i-adj", options: ["わるい", "わかい", "かるい", "おいしい"] },
+{ emoji: "🟢", en: "easy", kanji: "<ruby>易<rt>やさ</rt></ruby>しい", kana: "やさしい", group: "i-adj", options: ["やさしい", "むずかしい", "やすい", "おいしい"] },
+{ emoji: "🥰", en: "kind", kanji: "<ruby>優<rt>やさ</rt></ruby>しい", kana: "やさしい", group: "i-adj", options: ["やさしい", "きびしい", "やすい", "たのしい"] },
+{ emoji: "🏷️", en: "cheap", kanji: "<ruby>安<rt>やす</rt></ruby>い", kana: "やすい", group: "i-adj", options: ["やすい", "たかい", "やさしい", "せまい"] },
+{ emoji: "👍", en: "good", kanji: "<ruby>良<rt>よ</rt></ruby>い / <ruby>良<rt>い</rt></ruby>い", kana: "よい / いい", group: "i-adj", options: ["いい", "わるい", "おおい", "とおい"] },
+{ emoji: "🥀", en: "weak", kanji: "<ruby>弱<rt>よわ</rt></ruby>い", kana: "よわい", group: "i-adj", options: ["よわい", "つよい", "わるい", "おもい"] },
+{ emoji: "🛠️", en: "convenient", kanji: "<ruby>便利<rt>べんり</rt></ruby>", kana: "べんり", group: "na-adj", options: ["べんり", "げんき", "じょうぶ", "ていねい"] },
+{ emoji: "👍", en: "alright", kanji: "<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>", kana: "だいじょうぶ", group: "na-adj", options: ["だいじょうぶ", "たいへん", "いろいろ", "りっぱ"] },
+{ emoji: "❤️", en: "love", kanji: "<ruby>大好<rt>だいす</rt></ruby>き", kana: "だいすき", group: "na-adj", options: ["だいすき", "きらい", "すき", "たいせつ"] },
+{ emoji: "⚡", en: "energetic", kanji: "<ruby>元気<rt>げんき</rt></ruby>", kana: "げんき", group: "na-adj", options: ["げんき", "べんり", "ひま", "きれい"] },
+{ emoji: "📉", en: "poor (at)", kanji: "<ruby>下手<rt>へた</rt></ruby>", kana: "へた", group: "na-adj", options: ["へた", "じょうず", "いや", "きらい"] },
+{ emoji: "🏖️", en: "free time", kanji: "<ruby>暇<rt>ひま</rt></ruby>", kana: "ひま", group: "na-adj", options: ["ひま", "げんき", "べんり", "たいへん"] },
+{ emoji: "🔀", en: "various", kanji: "<ruby>色々<rt>いろいろ</rt></ruby>", kana: "いろいろ", group: "na-adj", options: ["いろいろ", "りっぱ", "たいへん", "げんき"] },
+{ emoji: "🙅", en: "unpleasant / dislike", kanji: "<ruby>嫌<rt>いや</rt></ruby>", kana: "いや", group: "na-adj", options: ["いや", "すき", "きらい", "へた"] },
+{ emoji: "🛡️", en: "durable", kanji: "<ruby>丈夫<rt>じょうぶ</rt></ruby>", kana: "じょうぶ", group: "na-adj", options: ["じょうぶ", "じょうず", "べんり", "りっぱ"] },
+{ emoji: "🎯", en: "skillful", kanji: "<ruby>上手<rt>じょうず</rt></ruby>", kana: "じょうず", group: "na-adj", options: ["じょうず", "へた", "じょうぶ", "すき"] },
+{ emoji: "hate", en: "hate", kanji: "<ruby>嫌<rt>きら</rt></ruby>い", kana: "きらい", group: "na-adj", options: ["きらい", "すき", "きれい", "いや"] },
+{ emoji: "🌸", en: "pretty", kanji: "<ruby>綺麗<rt>きれい</rt></ruby>", kana: "きれい", group: "na-adj", options: ["きれい", "きらい", "しずか", "にぎやか"] },
+{ emoji: "➡️", en: "straight", kanji: "<ruby>真<rt>ま</rt></ruby>っ<ruby>直<rt>す</rt></ruby>ぐ", kana: "まっすぐ", group: "na-adj", options: ["まっすぐ", "りっぱ", "しずか", "げんき"] },
+{ emoji: "🏙️", en: "bustling", kanji: "<ruby>賑<rt>にぎ</rt></ruby>やか", kana: "にぎやか", group: "na-adj", options: ["にぎやか", "しずか", "きれい", "ゆうめい"] },
+{ emoji: "🌟", en: "splendid", kanji: "<ruby>立派<rt>りっぱ</rt></ruby>", kana: "りっぱ", group: "na-adj", options: ["りっぱ", "たいせつ", "じょうぶ", "いろいろ"] },
+{ emoji: "🤫", en: "quiet", kanji: "<ruby>静<rt>しず</rt></ruby>か", kana: "しずか", group: "na-adj", options: ["しずか", "にぎやか", "きれい", "ひま"] },
+{ emoji: "💖", en: "like", kanji: "<ruby>好<rt>す</rt></ruby>き", kana: "すき", group: "na-adj", options: ["すき", "きらい", "いや", "だいすき"] },
+{ emoji: "🔥", en: "terrible / hard", kanji: "<ruby>大変<rt>たいへん</rt></ruby>", kana: "たいへん", group: "na-adj", options: ["たいへん", "たいせつ", "だいじょうぶ", "りっぱ"] },
+{ emoji: "💓", en: "important", kanji: "<ruby>大切<rt>たいせつ</rt></ruby>", kana: "たいせつ", group: "na-adj", options: ["たいせつ", "たいへん", "ゆうめい", "すき"] },
+{ emoji: "⭐", en: "famous", kanji: "<ruby>有名<rt>ゆうめい</rt></ruby>", kana: "ゆうめい", group: "na-adj", options: ["ゆうめい", "たいせつ", "りっぱ", "きれい"] },
+  {
+    emoji: "⚠️",
+    en: "not dangerous",
+    kanji: "<ruby>危<rt>あぶ</rt></ruby>なくない",
+    kana: "あぶなくない",
+    group: "i-adj",
+    correct: "あぶなくない",
+    options: ["あぶなくない", "あぶないじゃない", "あかるいじゃない", "あかるくない"]
+  },
+  {
+    emoji: "🔴",
+    en: "not red",
+    kanji: "<ruby>赤<rt>あか</rt></ruby>くない",
+    kana: "あかくない",
+    group: "i-adj",
+    correct: "あかくない",
+    options: ["あかくない", "あかいじゃない", "あかるいじゃない", "あかるくない"]
+  },
+  {
+    emoji: "☀️",
+    en: "not bright",
+    kanji: "<ruby>明<rt>あか</rt></ruby>るくない",
+    kana: "あかるくない",
+    group: "i-adj",
+    correct: "あかるくない",
+    options: ["あかるくない", "あかるいじゃない", "あかいじゃない", "あかくない"]
+  },
+  {
+    emoji: "🍬",
+    en: "not sweet",
+    kanji: "<ruby>甘<rt>あま</rt></ruby>くない",
+    kana: "あまくない",
+    group: "i-adj",
+    correct: "あまくない",
+    options: ["あまくない", "あまいじゃない", "あかいじゃない", "あかるくない"]
+  },
+  {
+    emoji: "🍋",
+    en: "not sour",
+    kanji: "<ruby>酢<rt>す</rt></ruby>っぱくない",
+    kana: "すっぱくない",
+    group: "i-adj",
+    correct: "すっぱくない",
+    options: ["しょっぱくない", "しょっぱいじゃない", "すっぱいじゃない", "すっぱくない"]
+  },
+  {
+    emoji: "🧂",
+    en: "not salty",
+    kanji: "<ruby>塩<rt>しょ</rt></ruby>っぱくない",
+    kana: "しょっぱくない",
+    group: "i-adj",
+    correct: "しょっぱくない",
+    options: ["しょっぱくない", "しょっぱいじゃない", "すっぱいじゃない", "すっぱくない"]
+  },
+  {
+    emoji: "☕",
+    en: "not bitter",
+    kanji: "<ruby>苦<rt>にが</rt></ruby>くない",
+    kana: "にがくない",
+    group: "i-adj",
+    correct: "にがくない",
+    options: ["にがくない", "にがいじゃない", "すっぱいじゃない", "すっぱくない"]
+  },
+  {
+    emoji: "🔵",
+    en: "not blue",
+    kanji: "<ruby>青<rt>あお</rt></ruby>くない",
+    kana: "あおくない",
+    group: "i-adj",
+    correct: "あおくない",
+    options: ["あおくない", "あおいじゃない", "あついじゃない", "あつくない"]
+  },
+  {
+    emoji: "✨",
+    en: "not new",
+    kanji: "<ruby>新<rt>あたら</rt></ruby>しくない",
+    kana: "あたしくない",
+    group: "i-adj",
+    correct: "あたしくない",
+    options: ["あたしくない", "あたらしいじゃない", "あたたかいじゃない", "あたたかくない"]
+  },
+  {
+    emoji: "🌤",
+    en: "not warm",
+    kanji: "<ruby>暖<rt>あたた</rt></ruby>かくない",
+    kana: "あたたかくない",
+    group: "i-adj",
+    correct: "あたたかくない",
+    options: ["あつくない", "あついじゃない", "あたたかいじゃない", "あたたかくない"]
+  },
+  {
+    emoji: "♨️",
+    en: "not warm",
+    kanji: "<ruby>温<rt>あたた</rt></ruby>かくない",
+    kana: "あたたかくない",
+    group: "i-adj",
+    correct: "あたたかくない",
+    options: ["あつくない", "あついじゃない", "あたたかいじゃない", "あたたかくない"]
+  },
+  {
+    emoji: "🧱",
+    en: "not thick",
+    kanji: "<ruby>厚<rt>あつ</rt></ruby>くない",
+    kana: "あつくない",
+    group: "i-adj",
+    correct: "あつくない",
+    options: ["あつくない", "あついじゃない", "あたたかいじゃない", "あたたかくない"]
+  },
+  {
+    emoji: "🌞",
+    en: "not hot",
+    kanji: "<ruby>暑<rt>あつ</rt></ruby>くない",
+    kana: "あつくない",
+    group: "i-adj",
+    correct: "あつくない",
+    options: ["あつくない", "あついじゃない", "あたたかいじゃない", "あたたかくない"]
+  },
+  {
+    emoji: "☕",
+    en: "not hot",
+    kanji: "<ruby>熱<rt>あつ</rt></ruby>くない",
+    kana: "あつくない",
+    group: "i-adj",
+    correct: "あつくない",
+    options: ["あつくない", "あついじゃない", "あたたかいじゃない", "あたたかくない"]
+  },
+  {
+    emoji: "🐜",
+    en: "not small",
+    kanji: "<ruby>小<rt>ちい</rt></ruby>さくない",
+    kana: "ちいさくない",
+    group: "i-adj",
+    correct: "ちいさくない",
+    options: ["ちかくない", "ちかいじゃない", "ちいさいじゃない", "ちいさくない"]
+  },
+  {
+    emoji: "📍",
+    en: "not near",
+    kanji: "<ruby>近<rt>ちか</rt></ruby>くない",
+    kana: "ちかくない",
+    group: "i-adj",
+    correct: "ちかくない",
+    options: ["ちかくない", "ちかいじゃない", "ちいさいじゃない", "ちいさくない"]
+  },
+  {
+    emoji: "🏛️",
+    en: "not old",
+    kanji: "<ruby>古<rt>ふる</rt></ruby>くない",
+    kana: "ふるくない",
+    group: "i-adj",
+    correct: "ふるくない",
+    options: ["ふとくない", "ふといじゃない", "ふるいじゃない", "ふるくない"]
+  },
+  {
+    emoji: "🫃",
+    en: "not fat",
+    kanji: "<ruby>太<rt>ふと</rt></ruby>くない",
+    kana: "ふとくない",
+    group: "i-adj",
+    correct: "ふとくない",
+    options: ["ふとくない", "ふといじゃない", "ふるいじゃない", "ふるくない"]
+  },
+  {
+    emoji: "⏰",
+    en: "not early",
+    kanji: "<ruby>早<rt>はや</rt></ruby>くない",
+    kana: "はやくない",
+    group: "i-adj",
+    correct: "はやくない",
+    options: ["はやくない", "はやいじゃない",  "ひくいじゃない", "ひくくない"]
+  },
+  {
+    emoji: "🏃",
+    en: "not fast",
+    kanji: "<ruby>速<rt>はや</rt></ruby>くない",
+    kana: "はやくない",
+    group: "i-adj",
+    correct: "はやくない",
+    options: ["はやくない", "はやいじゃない", "ひくいじゃない", "ひくくない"]
+  },
+  {
+    emoji: "📉",
+    en: "not short / not low",
+    kanji: "<ruby>低<rt>ひく</rt></ruby>くない",
+    kana: "ひくくない",
+    group: "i-adj",
+    correct: "ひくくない",
+    options: ["ひろくない", "ひろいじゃない", "ひくいじゃない", "ひくくない"]
+  },
+  {
+    emoji: "🏞️",
+    en: "not spacious",
+    kanji: "<ruby>広<rt>ひろ</rt></ruby>くない",
+    kana: "ひろくない",
+    group: "i-adj",
+    correct: "ひろくない",
+    options: ["ひろくない", "ひろいじゃない", "ひくいじゃない", "ひくくない"]
+  },
+  {
+    emoji: "🤲",
+    en: "do not want",
+    kanji: "<ruby>欲<rt>ほ</rt></ruby>しくない",
+    kana: "ほしくない",
+    group: "i-adj",
+    correct: "ほしくない",
+    options: ["ほしくない", "ほしいじゃない", "ほそいじゃない", "ほそくない"]
+  },
+  {
+    emoji: "🧵",
+    en: "not thin",
+    kanji: "<ruby>細<rt>ほそ</rt></ruby>くない",
+    kana: "ほそくない",
+    group: "i-adj",
+    correct: "ほそくない",
+    options: ["ほそくない", "ほそいじゃない", "ほしいじゃない", "ほしくない"]
+  },
+  {
+    emoji: "🏃‍♂️",
+    en: "not busy",
+    kanji: "<ruby>忙<rt>いそがし</rt></ruby>くない",
+    kana: "いそがしくない",
+    group: "i-adj",
+    correct: "いそがしくない",
+    options: ["いそがしくない", "いそがしいじゃない", "いたいじゃない", "いたいくない"]
+  },
+  {
+    emoji: "🩹",
+    en: "not painful",
+    kanji: "<ruby>痛<rt>いた</rt></ruby>くない",
+    kana: "いたくない",
+    group: "i-adj",
+    correct: "いたくない",
+    options: ["いたくない", "いたいじゃない", "からいじゃない", "からくない"]
+  },
+  {
+    emoji: "🌶️",
+    en: "not spicy",
+    kanji: "<ruby>辛<rt>から</rt></ruby>くない",
+    kana: "からくない",
+    group: "i-adj",
+    correct: "からくない",
+    options: ["かるくない", "かるいじゃない", "からいいじゃない", "からくない"]
+  },
+  {
+    emoji: "🪶",
+    en: "not light",
+    kanji: "<ruby>軽<rt>かる</rt></ruby>くない",
+    kana: "かるくない",
+    group: "i-adj",
+    correct: "かるくない",
+    options: ["かるくない", "かるいじゃない", "からいいじゃない", "からくない"]
+  },
+  {
+    emoji: "🧸",
+    en: "not cute",
+    kanji: "<ruby>可愛<rt>かわい</rt></ruby>くない",
+    kana: "かわいくない",
+    group: "i-adj",
+    correct: "かわいくない",
+    options: ["かわいくない", "かわいいじゃない", "かわいじゃない", "かわいいくない"]
+  },
+  {
+    emoji: "💛",
+    en: "not yellow",
+    kanji: "<ruby>黄色<rt>きいろ</rt></ruby>くない",
+    kana: "きいろくない",
+    group: "i-adj",
+    correct: "きいろくない",
+    options: ["きたなくない", "きたないじゃない", "きいろいじゃない", "きいろくない"]
+  },
+  {
+    emoji: "🗑️",
+    en: "not dirty",
+    kanji: "<ruby>汚<rt>きたな</rt></ruby>くない",
+    kana: "きたなくない",
+    group: "i-adj",
+    correct: "きたなくない",
+    options: ["きたなくない", "きたないじゃない", "きいろいじゃない", "きいろくない"]
+  },
+  {
+    emoji: "🌑",
+    en: "not dark",
+    kanji: "<ruby>暗<rt>くら</rt></ruby>くない",
+    kana: "くらくない",
+    group: "i-adj",
+    correct: "くらくない",
+    options: ["くろくない", "くろいじゃない", "くらいじゃない", "くらくない"]
+  },
+  {
+    emoji: "⬛",
+    en: "not black",
+    kanji: "<ruby>黒<rt>くろ</rt></ruby>くない",
+    kana: "くろくない",
+    group: "i-adj",
+    correct: "くろくない",
+    options: ["くろくない", "くろいじゃない", "くらいじゃない", "くらくない"]
+  },
+  {
+    emoji: "⭕",
+    en: "not round",
+    kanji: "<ruby>丸<rt>まる</rt></ruby>くない",
+    kana: "まるくない",
+    group: "i-adj",
+    correct: "まるくない",
+    options: ["まるくない", "まるいじゃない", "みじかいじゃない", "みじかくない"]
+  },
+  {
+    emoji: "🤢",
+    en: "not unpleasant",
+    kanji: "<ruby>不味<rt>まず</rt></ruby>くない",
+    kana: "まずくない",
+    group: "i-adj",
+    correct: "まずくない",
+    options: ["まずくない", "まずいじゃない", "みじかいじゃない", "みじかくない"]
+  },
+  {
+    emoji: "📏",
+    en: "not short",
+    kanji: "<ruby>短<rt>みじか</rt></ruby>くない",
+    kana: "みじかくない",
+    group: "i-adj",
+    correct: "みじかくない",
+    options: ["むずしくない", "むずかしいじゃない", "みじかいじゃない", "みじかくない"]
+  },
+  {
+    emoji: "🧩",
+    en: "not difficult",
+    kanji: "<ruby>難<rt>むずか</rt></ruby>しくない",
+    kana: "むずしくない",
+    group: "i-adj",
+    correct: "むずしくない",
+    options: ["むずしくない", "むずかしいじゃない", "みじかいじゃない", "みじかくない"]
+  },
+  {
+    emoji: "⏳",
+    en: "not long",
+    kanji: "<ruby>長<rt>なが</rt></ruby>くない",
+    kana: "ながくない",
+    group: "i-adj",
+    correct: "ながくない",
+    options: ["ながくない", "ながいじゃない", "ぬるいじゃない", "ぬるくない"]
+  },
+  {
+    emoji: "🍵",
+    en: "not lukewarm",
+    kanji: "<ruby>温<rt>ぬる</rt></ruby>くない",
+    kana: "ぬるくない",
+    group: "i-adj",
+    correct: "ぬるくない",
+    options: ["ぬるくない", "ぬるいじゃない", "ながいじゃない", "ながくない"]  
+  },
+  {
+    emoji: "🍱",
+    en: "not delicious",
+    kanji: "<ruby>美味<rt>おい</rt></ruby>しくない",
+    kana: "おいしくない",
+    group: "i-adj",
+    correct: "おいしくない",
+    options: ["おいしくない", "おいしいじゃない", "おもしろいじゃない", "おもしろくない"]
+  },
+  {
+    emoji: "🪨",
+    en: "not heavy",
+    kanji: "<ruby>重<rt>おも</rt></ruby>くない",
+    kana: "おもくない",
+    group: "i-adj",
+    correct: "おもくない",
+    options: ["おもくない", "おもいじゃない", "おもしろいじゃない", "おもしろくない"]
+  },
+  {
+    emoji: "💡",
+    en: "not interesting",
+    kanji: "<ruby>面白<rt>おもしろ</rt></ruby>くない",
+    kana: "おもしろくない",
+    group: "i-adj",
+    correct: "おもしろくない",
+    options: ["おもしろくない", "おもしろいじゃない", "おもいじゃない", "おもくない"]
+  },
+  {
+    emoji: "👥",
+    en: "not many",
+    kanji: "<ruby>多<rt>おお</rt></ruby>くない",
+    kana: "おおくない",
+    group: "i-adj",
+    correct: "おおくない",
+    options: ["おおくない", "おおいじゃない", "おおきいじゃない", "おおきくない"]
+  },
+  {
+    emoji: "🐘",
+    en: "not big",
+    kanji: "<ruby>大<rt>おお</rt></ruby>きくない",
+    kana: "おおきくない",
+    group: "i-adj",
+    correct: "おおきくない",
+    options: ["おおきくない", "おおきいじゃない", "おおいじゃない", "おおくない"]
+  },
+  {
+    emoji: "🐢",
+    en: "not slow",
+    kanji: "<ruby>遅<rt>おそ</rt></ruby>くない",
+    kana: "おそくない",
+    group: "i-adj",
+    correct: "おそくない",
+    options: ["おそくない", "おそいじゃない", "おおきいじゃない", "おおきくない"]
+  },
+  {
+    emoji: "❄️",
+    en: "not cold",
+    kanji: "<ruby>寒<rt>さむ</rt></ruby>くない",
+    kana: "さむくない",
+    group: "i-adj",
+    correct: "さむくない",
+    options: ["さむくない", "さむいじゃない", "せまいじゃない", "せまくない"]
+  },
+  {
+    emoji: "📐",
+    en: "not narrow",
+    kanji: "<ruby>狭<rt>せま</rt></ruby>くない",
+    kana: "せまくない",
+    group: "i-adj",
+    correct: "せまくない",
+    options: ["せまくない", "せまいじゃない", "しろいじゃない", "しろいくない"]
+  },
+  {
+    emoji: "⬜",
+    en: "not white",
+    kanji: "<ruby>白<rt>しろ</rt></ruby>くない",
+    kana: "しろくない",
+    group: "i-adj",
+    correct: "しろくない",
+    options: ["しろくない", "しろいじゃない", "せまいじゃない", "せまいくない"]
+  },
+  {
+    emoji: "📉",
+    en: "not few",
+    kanji: "<ruby>少<rt>すく</rt></ruby>なくない",
+    kana: "すくなくない",
+    group: "i-adj",
+    correct: "すくなくない",
+    options: ["すくなくない", "すくないじゃない", "さむいじゃない", "さむくない"]
+  },
+  {
+    emoji: "🍃",
+    en: "not cool",
+    kanji: "<ruby>涼<rt>すず</rt></ruby>しくない",
+    kana: "すずしくない",
+    group: "i-adj",
+    correct: "すずしくない",
+    options: ["すずしくない", "すずしいじゃない", "つめたいじゃない", "つめたくない"]
+  },
+  {
+    emoji: "🏢",
+    en: "not high / not expensive",
+    kanji: "<ruby>高<rt>たか</rt></ruby>くない",
+    kana: "たかくない",
+    group: "i-adj",
+    correct: "たかくない",
+    options: ["たかくない", "たかいじゃない", "たのしいじゃない", "たのしくない"]
+  },
+  {
+    emoji: "🎡",
+    en: "not enjoyable",
+    kanji: "<ruby>楽<rt>たの</rt></ruby>しくない",
+    kana: "たのしくない",
+    group: "i-adj",
+    correct: "たのしくない",
+    options: ["たのしくない", "たのしいじゃない", "たかいじゃない", "たかくない"]
+  },
+  {
+    emoji: "🔭",
+    en: "not far",
+    kanji: "<ruby>遠<rt>とお</rt></ruby>くない",
+    kana: "とおくない",
+    group: "i-adj",
+    correct: "とおくない",
+    options: ["とおくない", "とおいじゃない", "たのしいじゃない", "たのしくない"]
+  },
+  {
+    emoji: "🥱",
+    en: "not boring",
+    kanji: "<ruby>詰<rt>つ</rt></ruby>まらなくない",
+    kana: "つまらなくない",
+    group: "i-adj",
+    correct: "つまらなくない",
+    options: ["つまらなくない", "つまらないじゃない", "つめたいじゃない", "つめたくない"]
+  },
+  {
+    emoji: "🧊",
+    en: "not cold to touch",
+    kanji: "<ruby>冷<rt>つめ</rt></ruby>たくない",
+    kana: "つめたくない",
+    group: "i-adj",
+    correct: "つめたくない",
+    options: ["つめたくない", "つめたいじゃない", "さむいじゃない", "さむくない"]
+  },
+  {
+    emoji: "💪",
+    en: "not powerful",
+    kanji: "<ruby>強<rt>つよ</rt></ruby>くない",
+    kana: "つよくない",
+    group: "i-adj",
+    correct: "つよくない",
+    options: ["つよくない", "つよいじゃない", "つめたいじゃない", "つめたくない"]
+  },
+  {
+    emoji: "📢",
+    en: "not noisy",
+    kanji: "<ruby>五月蠅<rt>うるさ</rt></ruby>くない",
+    kana: "うるさくない",
+    group: "i-adj",
+    correct: "うるさくない",
+    options: ["うるさくない", "うるさいじゃない", "つよいじゃない", "つよくない"]
+  },
+  {
+    emoji: "💧",
+    en: "not thin",
+    kanji: "<ruby>薄<rt>うす</rt></ruby>くない",
+    kana: "うすくない",
+    group: "i-adj",
+    correct: "うすくない",
+    options: ["うすくない", "うすいじゃない", "ひまじゃない", "ひまくない"]
+  },
+  {
+    emoji: "🌱",
+    en: "not young",
+    kanji: "<ruby>若<rt>わか</rt></ruby>くない",
+    kana: "わかくない",
+    group: "i-adj",
+    correct: "わかくない",
+    options: ["わかくない", "わかいじゃない", "へたじゃない", "へたくない"]
+  },
+  {
+    emoji: "❌",
+    en: "not bad",
+    kanji: "<ruby>悪<rt>わる</rt></ruby>くない",
+    kana: "わるくない",
+    group: "i-adj",
+    correct: "わるくない",
+    options: ["わるくない", "わるいじゃない", "きらいじゃない", "きらいくない"]
+  },
+  {
+    emoji: "🟢",
+    en: "not easy",
+    kanji: "<ruby>易<rt>やさ</rt></ruby>しくない",
+    kana: "やさしくない",
+    group: "i-adj",
+    correct: "やさしくない",
+    options: ["やさしくない", "やさしいじゃない", "やすいじゃない", "やすくない"]
+  },
+  {
+    emoji: "🥰",
+    en: "not kind",
+    kanji: "<ruby>優<rt>やさ</rt></ruby>しくない",
+    kana: "やさしくない",
+    group: "i-adj",
+    correct: "やさしくない",
+    options: ["やさしくない", "やさしいじゃない", "やすいじゃない", "やすいくない"]
+  },
+  {
+    emoji: "🏷️",
+    en: "not cheap",
+    kanji: "<ruby>安<rt>やす</rt></ruby>くない",
+    kana: "やすくない",
+    group: "i-adj",
+    correct: "やすくない",
+    options: ["やすくない", "やすいじゃない", "ひくいじゃない", "ひくくくない"]
+  },
+  {
+    emoji: "👍",
+    en: "not good",
+    kanji: "<ruby>良<rt>よ</rt></ruby>くない",
+    kana: "よくない",
+    group: "i-adj",
+    correct: "よくない",
+    options: ["よくない", "いくない", "よいじゃない", "いいくない"]
+  },
+  {
+    emoji: "🥀",
+    en: "not weak",
+    kanji: "<ruby>弱<rt>よわ</rt></ruby>くない",
+    kana: "よわくない",
+    group: "i-adj",
+    correct: "よわくない",
+    options: ["よわくない", "よわいじゃない", "よいじゃない", "よくない"]
+  },
+  {
+    emoji: "🛠️",
+    en: "not convenient",
+    kanji: "<ruby>便利<rt>べんり</rt></ruby>じゃない",
+    kana: "べんりじゃない",
+    group: "na-adj",
+    correct: "べんりじゃない",
+    options: ["べんりじゃない", "べんりくない", "よわいじゃない", "よわくない"]
+  },
+  {
+    emoji: "👍",
+    en: "not OK",
+    kanji: "<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>じゃない",
+    kana: "だいじょうぶじゃない",
+    group: "na-adj",
+    correct: "だいじょうぶじゃない",
+    options: ["だいじょうぶじゃない", "だいじょうぶくない", "じょうぶじゃない", "じょうぶくない"]
+  },
+  {
+    emoji: "❤️",
+    en: "do not like very much",
+    kanji: "<ruby>大好<rt>だいす</rt></ruby>きじゃない",
+    kana: "だいすきじゃない",
+    group: "na-adj",
+    correct: "だいすきじゃない",
+    options: ["だいすきじゃない", "だいすきくない", "すきじゃない", "すきくない"]
+  },
+  {
+    emoji: "💪",
+    en: "not energetic",
+    kanji: "<ruby>元気<rt>げんき</rt></ruby>じゃない",
+    kana: "げんきじゃない",
+    group: "na-adj",
+    correct: "げんきじゃない",
+    options: ["げんきじゃない", "げんきくない", "にぎやかじゃない", "にぎやかくない"]
+  },
+  {
+    emoji: "📉",
+    en: "not unskillful",
+    kanji: "<ruby>下手<rt>へた</rt></ruby>じゃない",
+    kana: "へたじゃない",
+    group: "na-adj",
+    correct: "へたじゃない",
+    options: ["へたじゃない", "へたくない", "ひまじゃない", "ひまくない"]
+  },
+  {
+    emoji: "🏖️",
+    en: "not free",
+    kanji: "<ruby>暇<rt>ひま</rt></ruby>じゃない",
+    kana: "ひまじゃない",
+    group: "na-adj",
+    correct: "ひまじゃない",
+    options: ["ひまじゃない", "ひまくない", "にぎやかじゃない", "にぎやかくない"]
+  },
+  {
+    emoji: "🔀",
+    en: "not various",
+    kanji: "<ruby>色々<rt>いろいろ</rt></ruby>じゃない",
+    kana: "いろいろじゃない",
+    group: "na-adj",
+    correct: "いろいろじゃない",
+    options: ["いろいろじゃない", "いろいろくない", "にんきじゃない", "にんきくない"]
+  },
+  {
+    emoji: "🙅",
+    en: "not unpleasant (okay)",
+    kanji: "<ruby>嫌<rt>いや</rt></ruby>じゃない",
+    kana: "いやじゃない",
+    group: "na-adj",
+    correct: "いやじゃない",
+    options: ["いやじゃない", "いやくない", "きらいじゃない", "きらいくない"]
+  },
+  {
+    emoji: "🛡️",
+    en: "not durable",
+    kanji: "<ruby>丈夫<rt>じょうぶ</rt></ruby>じゃない",
+    kana: "じょうぶじゃない",
+    group: "na-adj",
+    correct: "じょうぶじゃない",
+    options: ["じょうぶじゃない", "じょうぶくない", "じょうずじゃない", "じょうずくない"]
+  },
+  {
+    emoji: "🎯",
+    en: "not skillful",
+    kanji: "<ruby>上手<rt>じょうず</rt></ruby>じゃない",
+    kana: "じょうずじゃない",
+    group: "na-adj",
+    correct: "じょうずじゃない",
+    options: ["じょうずじゃない", "じょうずくない", "じょうぶじゃない", "じょうずぶくない"]
+  },
+  {
+    emoji: "hate",
+    en: "do not hate",
+    kanji: "<ruby>嫌<rt>きら</rt></ruby>いじゃない",
+    kana: "きらいじゃない",
+    group: "na-adj",
+    correct: "きらいじゃない",
+    options: ["きらいじゃない", "きらいくない", "きれいじゃない", "きれいくない"]
+  },
+  {
+    emoji: "🌸",
+    en: "not pretty",
+    kanji: "<ruby>綺麗<rt>きれい</rt></ruby>じゃない",
+    kana: "きれいじゃない",
+    group: "na-adj",
+    correct: "きれいじゃない",
+    options: ["きれいじゃない", "きれいくない", "きらいじゃない", "きらいくない"]
+  },
+  {
+    emoji: "➡️",
+    en: "not straight",
+    kanji: "<ruby>真<rt>ま</rt></ruby>っ<ruby>直<rt>す</rt></ruby>ぐじゃない",
+    kana: "まっすぐじゃない",
+    group: "na-adj",
+    correct: "まっすぐじゃない",
+    options: ["まっすぐじゃない", "まっすぐくない", "しずかじゃない", "しずかくない"]
+  },
+  {
+    emoji: "🏙️",
+    en: "not bustling",
+    kanji: "<ruby>賑<rt>にぎ</rt></ruby>やかじゃない",
+    kana: "にぎやかじゃない",
+    group: "na-adj",
+    correct: "にぎやかじゃない",
+    options: ["にぎやかじゃない", "にぎやかくない", "げんきじゃない", "げんきくない"]
+  },
+  {
+    emoji: "🌟",
+    en: "not splendid",
+    kanji: "<ruby>立派<rt>りっぱ</rt></ruby>じゃない",
+    kana: "りっぱじゃない",
+    group: "na-adj",
+    correct: "りっぱじゃない",
+    options: ["りっぱじゃない", "りっぱくない", "しずかじゃない", "しずかくない"]
+  },
+  {
+    emoji: "🤫",
+    en: "not quiet",
+    kanji: "<ruby>静<rt>しず</rt></ruby>かじゃない",
+    kana: "しずかじゃない",
+    group: "na-adj",
+    correct: "しずかじゃない",
+    options: ["しずかじゃない", "しずかくない", "ゆうめいじゃない", "ゆうめいくない"]
+  },
+  {
+    emoji: "💖",
+    en: "do not like",
+    kanji: "<ruby>好<rt>す</rt></ruby>きじゃない",
+    kana: "すきじゃない",
+    group: "na-adj",
+    correct: "すきじゃない",
+    options: ["すきじゃない", "すきくない", "きらいじゃない", "きらいくない"]
+  },
+  {
+    emoji: "🔥",
+    en: "not very difficult",
+    kanji: "<ruby>大変<rt>たいへん</rt></ruby>じゃない",
+    kana: "たいへんじゃない",
+    group: "na-adj",
+    correct: "たいへんじゃない",
+    options: ["たいへんじゃない", "たいへんくない", "たいせつじゃない", "たいせつくない"]
+  },
+  {
+    emoji: "💓",
+    en: "not important",
+    kanji: "<ruby>大切<rt>たいせつ</rt></ruby>じゃない",
+    kana: "たいせつじゃない",
+    group: "na-adj",
+    correct: "たいせつじゃない",
+    options: ["たいせつじゃない", "たいせつくない", "ゆうめいじゃない", "ゆうめいくない"]
+  },
+  {
+    emoji: "⭐",
+    en: "not famous",
+    kanji: "<ruby>有名<rt>ゆうめい</rt></ruby>じゃない",
+    kana: "ゆうめいじゃない",
+    group: "na-adj",
+    correct: "ゆうめいじゃない",
+    options: ["ゆうめいじゃない", "ゆうめいくない", "にんきじゃない", "にんきくない"]
+  }
+];
+
+let quiz = [];
+let index = 0;
+let score = 0;
+
+function shuffle(array) {
+    return [...array].sort(() => Math.random() - 0.5);
+}
+
+// quizDataの単語リストには無いが、わざと違う（不正解の）選択肢として
+// 使われている語に手動でルビを設定
+const extraKanji = {
+    "こわい": "<ruby>怖<rt>こわ</rt></ruby>い",
+    "めずらしい": "<ruby>珍<rt>めずら</rt></ruby>しい",
+    "ただしい": "<ruby>正<rt>ただ</rt></ruby>しい",
+    "きびしい": "<ruby>厳<rt>きび</rt></ruby>しい",
+    "ていねい": "<ruby>丁寧<rt>ていねい</rt></ruby>",
+    "にんきじゃない": "<ruby>人気<rt>にんき</rt></ruby>じゃない",
+    "にんきくない": "<ruby>人気<rt>にんき</rt></ruby>くない",
+    "かわいじゃない": "<ruby>可愛<rt>かわい</rt></ruby>じゃない",
+    "うまい": "<ruby>美味<rt>うま</rt></ruby>い",
+    "いいくない": "<ruby>良<rt>い</rt></ruby>いくない",
+    "いくない": "<ruby>良<rt>い</rt></ruby>くない"
+};
+
+// quizDataに完全一致する読みが無い選択肢（間違った活用パターンのダミー等）でも、
+// 元になった単語の漢字・ルビ部分を流用してルビ付き表記を組み立てる
+function buildKanjiFromKana(kana) {
+    if (extraKanji[kana]) return extraKanji[kana];
+
+    let bestMatch = null;
+    for (const item of quizData) {
+        if (!item.kanji) continue;
+        if (kana.startsWith(item.kana) && (!bestMatch || item.kana.length > bestMatch.kana.length)) {
+            bestMatch = item;
+        }
+    }
+    if (!bestMatch) return kana; // 一致する語幹が無ければルビ無しでそのまま表示
+    return bestMatch.kanji + kana.slice(bestMatch.kana.length);
+}
+
+function start() {
+    quiz = shuffle(quizData);
+    index = 0;
+    score = 0;
+    document.querySelector("button").style.display = "none";
+    document.getElementById("result").style.display = "none";
+    document.getElementById("answers").style.display = "flex";
+    document.querySelector(".card").style.display = "flex";
+    document.getElementById("score").style.display = "block";
+    nextQuestion();
+}
+
+function updateView() {
+    if (quiz.length === 0 || index >= quiz.length) return;
+
+    const current = quiz[index];
+
+    document.getElementById("emojiDisplay").innerHTML = current.emoji;
+
+    const groupEl = document.getElementById("groupDisplay");
+    groupEl.className = current.group; // "i-adj" または "na-adj" のCSSクラスを付与
+    const groupIcon = current.group === "i-adj" ? "🔹" : "🔷";
+    groupEl.innerHTML = groupIcon + " " + current.group;
+
+
+    // 問題として「英単語」を表示
+    document.getElementById("question").innerHTML = current.en;
+    
+    renderAnswers();
+}
+
+function nextQuestion() {
+    document.getElementById("message").innerHTML = "";
+    document.getElementById("currentNum").innerHTML = index + 1;
+    document.getElementById("totalNum").innerHTML = quiz.length;
+
+    if (index >= quiz.length) {
+        document.getElementById("answers").style.display = "none";
+        document.getElementById("message").style.display = "none";
+        document.getElementById("score").style.display = "none";
+        document.querySelector(".card").style.display = "none";
+
+        let rate = score / quiz.length;
+        let stars =
+            rate === 1 ? "⭐⭐⭐⭐⭐" :
+            rate >= 0.8 ? "⭐⭐⭐⭐" :
+            rate >= 0.6 ? "⭐⭐⭐" :
+            rate >= 0.4 ? "⭐⭐" : "⭐";
+
+        document.getElementById("stars").innerHTML = stars;
+        document.getElementById("finalScore").innerHTML = `${score} / ${quiz.length}`;
+
+        document.getElementById("result").style.display = "block";
+        document.querySelector("button").style.display = "block";
+        return;
+    }
+
+    const current = quiz[index];
+
+    // 選択肢（日本語）をシャッフル
+    let choices = current.options.map(optKana => {
+        let found = quizData.find(item => item.kana === optKana);
+        return found ? found : { kanji: buildKanjiFromKana(optKana), kana: optKana };
+    });
+
+    quiz[index].currentChoices = shuffle(choices);
+
+    updateView();
+}
+
+document.getElementById("mode").addEventListener("change", () => {
+    renderAnswers();
+});
+
+function renderAnswers() {
+    if (quiz.length === 0 || index >= quiz.length) return;
+    const current = quiz[index];
+    
+    const isKanjiMode = document.getElementById("mode").checked;
+
+    let html = "";
+    current.currentChoices.forEach(item => {
+        let mainText = isKanjiMode ? (item.kanji || item.kana) : item.kana;
+
+        html += `
+            <div class="answer" onclick="answer(this, '${item.kana}')">
+                <div>${mainText}</div>
+            </div>
+        `;
+    });
+
+    document.getElementById("answers").innerHTML = html;
+}
+
+function answer(element, choiceKana) {
+    let current = quiz[index];
+    document.querySelectorAll(".answer").forEach(btn => btn.onclick = null);
+
+    if (choiceKana === current.kana) {
+        score++;
+        element.classList.add("correct");
+        document.getElementById("message").innerHTML = "✨ Correct!";
+        correctSound();
+    } else {
+        element.classList.add("wrong");
+        let correctDisplay = document.getElementById("mode").checked ? current.kanji : current.kana;
+        document.getElementById("message").innerHTML = "❌ " + correctDisplay;
+        wrongSound();
+    }
+
+    setTimeout(() => {
+        index++;
+        nextQuestion();
+    }, 1000);
+}
+
+function restart() {
+    start();
+}
+
+start();
+</script>
+
+</body>
+</html>
