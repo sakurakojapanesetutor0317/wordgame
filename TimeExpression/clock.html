@@ -31,6 +31,29 @@
     width:100%;
     max-width:520px;
   }
+  .homebar{
+    position:sticky;
+    top:10px;
+    z-index:20;
+    margin-bottom:10px;
+  }
+  .home-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:var(--panel);
+    color:var(--ink);
+    text-decoration:none;
+    font-weight:800;
+    font-size:0.9rem;
+    padding:9px 16px;
+    border-radius:999px;
+    box-shadow:var(--shadow);
+    border:2px solid rgba(0,0,0,0.06);
+    transition:transform .08s ease;
+  }
+  .home-btn:hover{ transform:translateY(-2px); }
+  .home-btn:active{ transform:translateY(0); }
   h1{
     text-align:center;
     font-size:1.6rem;
@@ -43,7 +66,14 @@
     font-size:0.85rem;
     margin-bottom:14px;
   }
-  .scorebar{
+  .meta-row{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:18px;
+  }
+  .scorebar, .progressbar{
     display:flex;
     justify-content:center;
     align-items:center;
@@ -53,7 +83,6 @@
     padding:8px 18px;
     box-shadow:var(--shadow);
     width:fit-content;
-    margin:0 auto 18px;
     font-weight:bold;
     font-size:0.95rem;
   }
@@ -217,10 +246,15 @@
 </head>
 <body>
 <div id="app">
+  <div class="homebar"><a class="home-btn" href="index.html">🏠 Back to Home</a></div>
+
   <h1>⏰ What Time Is It?</h1>
   <div class="sub">Japanese clock reading quiz — watch out for tricky readings!</div>
 
-  <div class="scorebar"><span class="star">★</span> Score <span id="scoreCorrect">0</span> / <span id="scoreTotal">0</span></div>
+  <div class="meta-row">
+    <div class="scorebar"><span class="star">★</span> Score <span id="scoreCorrect">0</span> / <span id="scoreTotal">0</span></div>
+    <div class="progressbar">📝 Question <span id="qNum">1</span> / <span id="qTotal">10</span></div>
+  </div>
 
   <div class="clock-card">
     <svg id="clock" viewBox="0 0 220 220"></svg>
@@ -249,12 +283,6 @@
   <button id="nextBtn">Next Question ▶</button>
 </div>
 
-<button onclick="restart()">Play Again</button>
-
-<!-- 戻るリンクをスコアの下に配置 -->
-<div style="text-align: center; margin-top: 10px;">
-    <a class="back" href="../index.html">← Back to Home</a>
-</div>
 <script>
 /* ------------------------------------------------------------------
    DATA: hour (時) readings — correct + 2 easily-confused wrong ones
@@ -326,6 +354,9 @@ function getHourReading(hour){
 /* ------------------------------------------------------------------
    GAME STATE
 ------------------------------------------------------------------ */
+const ROUNDS_PER_GAME = 10;
+let questionIndex = 0;
+
 let state = {
   hour: 0,
   minute: 0,
@@ -448,6 +479,9 @@ function setClockTime(hour, minute){
    QUESTION GENERATION & RENDERING
 ------------------------------------------------------------------ */
 function newQuestion(){
+  questionIndex++;
+  document.getElementById("qNum").textContent = questionIndex;
+
   const hour = randInt(1, 12);
   const minute = randInt(1, 59);
   state.hour = hour;
@@ -545,6 +579,7 @@ function showResult(){
   const big = document.getElementById("resultBig");
   const reading = document.getElementById("resultReading");
   const readingRomaji = document.getElementById("resultReadingRomaji");
+  const isLastQuestion = questionIndex >= ROUNDS_PER_GAME;
 
   if (hourOk && minuteOk){
     badge.className = "badge allgood";
@@ -564,14 +599,26 @@ function showResult(){
   readingRomaji.textContent = `(${state.hourCorrect.romaji} ${state.minuteCorrect.romaji})`;
 
   document.getElementById("resultCard").classList.add("show");
-  document.getElementById("nextBtn").style.display = "block";
+  const nextBtn = document.getElementById("nextBtn");
+  nextBtn.textContent = isLastQuestion ? "🔄 Play Again" : "Next Question ▶";
+  nextBtn.style.display = "block";
   document.getElementById("resultCard").scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
-document.getElementById("nextBtn").addEventListener("click", newQuestion);
+function goNext(){
+  if (questionIndex >= ROUNDS_PER_GAME){
+    score = { correct: 0, total: 0 };
+    questionIndex = 0;
+    updateScoreBar();
+  }
+  newQuestion();
+}
+
+document.getElementById("nextBtn").addEventListener("click", goNext);
 
 buildClockFace();
 newQuestion();
 </script>
 </body>
 </html>
+
