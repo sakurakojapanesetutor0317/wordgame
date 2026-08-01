@@ -161,10 +161,16 @@ section.section{
 /* ---------- Grid & Cards ---------- */
 .grid{
     display:grid;
-    grid-template-columns:repeat((4, 1fr),minmax(190px,1fr));
+    grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
     gap:18px;
 }
-
+.card-container, .grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 一行に必ず4枚配置 */
+    gap: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
 .card{
     position:relative;
     background:var(--card);
