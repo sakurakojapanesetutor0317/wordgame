@@ -161,7 +161,7 @@ section.section{
 /* ---------- Grid & Cards ---------- */
 .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+    grid-template-columns:repeat((4, 1fr),minmax(190px,1fr));
     gap:18px;
 }
 
@@ -172,10 +172,6 @@ section.section{
     border-radius:var(--radius);
     padding:26px 22px;
     text-align:center;
- 　 align-items: center;  /* 横方向の中心揃え */
-    justify-content: flex-start;
-    width: 220px;         /* 必要に応じてカードの幅を指定 */
-    height: 240px;        /* カードの高さを固定（または min-height） */
     padding: 24px 16px;
     box-sizing: border-box;
     position: relative;
