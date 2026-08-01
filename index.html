@@ -164,27 +164,29 @@ section.section{
     grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
     gap:18px;
 }
-.card-container, .grid-container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 一行に必ず4枚配置 */
-    gap: 20px;
-    width: 100%;
-    box-sizing: border-box;
-}
-.card{
-    position:relative;
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    padding:26px 22px;
-    text-align:center;
-    padding: 24px 16px;
-    box-sizing: border-box;
+
+
+/* 2. カード自体のスタイル（重複を整理し、高さを固定して大きさを完全統一） */
+.card {
     position: relative;
-    text-decoration:none;
-    color:var(--ink);
-    box-shadow:0 4px 14px rgba(45,43,58,.05);
-    transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 16px;            /* 競合していたパディングを一本化 */
+    text-align: center;
+    box-sizing: border-box;
+    text-decoration: none;
+    color: var(--ink);
+    box-shadow: 0 4px 14px rgba(45, 43, 58, .05);
+    transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+    
+    /* 追加：カードの大きさと高さを完全に揃えるための設定 */
+    width: 100%;
+    height: 220px;                 /* 高さを固定してガタつきを防止 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;           /* 横方向の真ん中揃え */
+    justify-content: flex-start;
 }
 
 .card:hover{
