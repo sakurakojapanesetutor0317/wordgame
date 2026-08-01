@@ -160,41 +160,26 @@ section.section{
 
 /* ---------- Grid & Cards ---------- */
 .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-    gap:20px;
-    margin-bottom:50px;
+    display: grid;
+    /* auto-fit をやめて、4列に完全固定する */
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 50px;
 }
 
 .card{
-
-    position:relative;
-
-    background:var(--card);
-
-    border:1px solid var(--border);
-
-    border-radius:var(--radius);
-
-    padding:26px 22px;
-
-    text-align:center;
-
-    padding: 24px 16px;
-
-    box-sizing: border-box;
-
     position: relative;
-
-    text-decoration:none;
-
-    color:var(--ink);
-
-    box-shadow:0 4px 14px rgba(45,43,58,.05);
-
-    transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
-    flex: 0 1 calc(25% - 15px);
-
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 16px; /* 重複していたpaddingを整理 */
+    text-align: center;
+    box-sizing: border-box;
+    text-decoration: none;
+    color: var(--ink);
+    box-shadow: 0 4px 14px rgba(45,43,58,.05);
+    transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+    /* グリッド内では不要な flex: 0 1 ... は削除しました */
 }
 
 .card:hover{
