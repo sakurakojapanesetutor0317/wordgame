@@ -160,8 +160,8 @@ section.section{
 
 /* ---------- Grid & Cards ---------- */
 .grid{
-    display:grid;
-    grid-template-columns: repeat(4, 1fr),minmax(190px,1fr));
+　　display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap:18px;
 }
 
@@ -194,9 +194,6 @@ section.section{
 
     transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
 
-    width: 230px;
-    display: inline-block; /* または flexで並べる場合の設定 */
-    vertical-align: top;
 }
 
 .card:hover{
