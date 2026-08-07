@@ -171,10 +171,10 @@ Go to Cashier 🛒</button>
     </div>
 
     <div id="screen-register" class="screen">
-        <h1>💰 <ruby>レジ<rt>れじ</rt></ruby> <span class="romaji-inline">(Reji)</span> (At the Cashier)</h1>
+        <h1>💰 レジ<span class="romaji-inline">(Reji)</span> (At the Cashier)</h1>
         <div class="chat-box" id="chat-box"></div>
         <div class="choices-container" id="choices-container"></div>
-        <button class="btn btn-secondary" id="restart-btn" onclick="resetGame()" style="display:none; margin-top: 20px;">またお<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>をする 
+        <button class="btn btn-secondary" id="restart-btn" onclick="resetGame()" style="display:none; margin-top: 20px;">また<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>をする 
 <br>
 <span class="romaji-inline">(Mata okaimono o suru)</span>
 <br>
@@ -205,14 +205,14 @@ Go to Cashier 🛒</button>
     // ===== Data =====
     // microwavable: あたための対象になるか
     const itemsData = [
-        { id: "tea", name: "<ruby>お茶<rt>おちゃ</rt></ruby>", romaji: "Ocha", eng: "Green tea", emoji: "🍵", type: "hon", price: 150, microwavable: false },
+        { id: "tea", name: "お<ruby>茶<rt>ちゃ</rt></ruby>", romaji: "Ocha", eng: "Green tea", emoji: "🍵", type: "hon", price: 150, microwavable: false },
         { id: "water", name: "<ruby>水<rt>みず</rt></ruby>", romaji: "Mizu", eng: "Water", emoji: "💧", type: "hon", price: 100, microwavable: false },
         { id: "coffee", name: "コーヒー", romaji: "Koohii", eng: "Coffee", emoji: "☕", type: "hon", price: 180, microwavable: false },
         { id: "juice", name: "ジュース", romaji: "Juusu", eng: "Juice", emoji: "🧃", type: "hon", price: 140, microwavable: false },
         { id: "onigiri", name: "おにぎり", romaji: "Onigiri", eng: "Rice ball", emoji: "🍙", type: "ko", price: 130, microwavable: false },
         { id: "sandwich", name: "サンドイッチ", romaji: "Sandoicchi", eng: "Sandwich", emoji: "🥪", type: "ko", price: 280, microwavable: false },
         { id: "bread", name: "パン", romaji: "Pan", eng: "Bread", emoji: "🍞", type: "ko", price: 120, microwavable: false },
-        { id: "bento", name: "<ruby>お弁当<rt>おべんとう</rt></ruby>", romaji: "Obentou", eng: "Bento box", emoji: "🍱", type: "ko", price: 480, microwavable: true },
+        { id: "bento", name: "お<ruby>弁当<rt>べんとう</rt></ruby>", romaji: "Obentou", eng: "Bento box", emoji: "🍱", type: "ko", price: 480, microwavable: true },
         { id: "chips", name: "チップス", romaji: "Chippusu", eng: "Potato chips", emoji: "🍿", type: "ko", price: 160, microwavable: false },
         { id: "chocolate", name: "チョコレート", romaji: "Chokoreeto", eng: "Chocolate", emoji: "🍫", type: "ko", price: 120, microwavable: false },
         { id: "candy", name: "あめ", romaji: "Ame", eng: "Candy", emoji: "🍬", type: "ko", price: 100, microwavable: false },
@@ -220,6 +220,7 @@ Go to Cashier 🛒</button>
         { id: "cake", name: "ケーキ", romaji: "Keeki", eng: "Cake", emoji: "🍰", type: "ko", price: 400, microwavable: false },
         { id: "pudding", name: "プリン", romaji: "Purin", eng: "Pudding", emoji: "🍮", type: "ko", price: 150, microwavable: false },
         { id: "yogurt", name: "ヨーグルト", romaji: "Yooguruto", eng: "Yogurt", emoji: "🥛", type: "ko", price: 130, microwavable: false },
+        { id: "ice", name: "アイス", romaji: "Aisu", eng: "Ice cream", emoji: "🍦", type: "ko", price: 200, microwavable: false },
         { id: "mochi", name: "だいふく / もち", romaji: "Daifuku / mochi", eng: "Mochi", emoji: "🍡", type: "ko", price: 140, microwavable: false }
     ];
 
