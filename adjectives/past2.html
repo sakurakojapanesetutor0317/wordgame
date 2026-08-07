@@ -482,7 +482,7 @@ to{ opacity:1; transform:translateY(0); }
 <div id="app">
 
 <div class="homebar">
-    <a class="home-btn" href="https://sakurakojapanesetutor0317.github.io/wordgame/n5.html">🏠 Back to Home</a>
+    <a class="home-btn" href="https://sakurakojapanesetutor0317.github.io/wordgame/adjectives/n5.html">🏠 Back to Home</a>
     <div id="userBar" class="user-pill" style="display:none;">
         <span id="userBarName"></span> <span class="switch-user" onclick="showLogin()">Switch User</span>
     </div>
@@ -803,8 +803,8 @@ const quizData = [
   },
 { emoji: "📍", en: "near", kanji: "<ruby>近<rt>ちか</rt></ruby>い", kana: "ちかい", group: "i-adj", options: ["ちかい", "ちいさい", "とおい", "きたない"] },
 { emoji: "🔭", en: "far", kanji: "<ruby>遠<rt>とお</rt></ruby>い", kana: "とおい", group: "i-adj", options: ["とおい", "ちかい", "おそい", "おおい"] },
-{ emoji: "🐜", en: "was small", kanji: "<ruby>小<rt>ちい</rt></ruby>さかった", kana: "ちいさかった", group: "i-adj", base: { kana: "ちいさい", kanji: "<ruby>小<rt>ちい</rt></ruby>さい" }, options: ["ちかかった", "ちかいかった", "ちいさい{ emoji: "📍", en: "was not near", kanji: "<ruby>近<rt>ちか</rt></ruby>くなかった", kana: "ちかくなかった", group: "i-adj", base: { kana: "ちかい", kanji: "<ruby>近<rt>ちか</rt></ruby>い" }, options: ["ちかくなかった", "ちかいじゃなかった", "ちいさいじゃなかった", "ちいさくなかった"] },
-かった", "ちいさかった"] },
+{ emoji: "🐜", en: "was small", kanji: "<ruby>小<rt>ちい</rt></ruby>さかった", kana: "ちいさかった", group: "i-adj", base: { kana: "ちいさい", kanji: "<ruby>小<rt>ちい</rt></ruby>さい" }, options: ["ちかかった", "ちかいかった", "ちいさいかった", "ちいさかった"] }, 
+{ emoji: "📍", en: "was not near", kanji: "<ruby>近<rt>ちか</rt></ruby>くなかった", kana: "ちかくなかった", group: "i-adj", base: { kana: "ちかい", kanji: "<ruby>近<rt>ちか</rt></ruby>い" }, options: ["ちかくなかった", "ちかいじゃなかった", "ちいさいじゃなかった", "ちいさくなかった"] },
 { emoji: "🔭", en: "was far", kanji: "<ruby>遠<rt>とお</rt></ruby>かった", kana: "とおかった", group: "i-adj", base: { kana: "とおい", kanji: "<ruby>遠<rt>とお</rt></ruby>い" }, options: ["とおかった", "とおいじゃなかった", "たのしいじゃなかった", "たのしかった"] },
 { emoji: "🔭", en: "was not far", kanji: "<ruby>遠<rt>とお</rt></ruby>くなかった", kana: "とおくなかった", group: "i-adj", base: { kana: "とおい", kanji: "<ruby>遠<rt>とお</rt></ruby>い" }, options: ["とおくなかった", "とおいじゃなかった", "たのしいじゃなかった", "たのしくなかった"] },
   {
@@ -827,8 +827,9 @@ const quizData = [
   },
 { emoji: "🏞️", en: "spacious", kanji: "<ruby>広<rt>ひろ</rt></ruby>い", kana: "ひろい", group: "i-adj", options: ["ひろい", "せまい", "おおい", "すくない"] },
 { emoji: "📐", en: "narrow", kanji: "<ruby>狭<rt>せま</rt></ruby>い", kana: "せまい", group: "i-adj", options: ["せまい", "ひろい", "さむい", "おもい"] },
-{ emoji: "🏞️", en: "was spacious", kanji: "<ruby>広<rt>ひろ</rt></ruby>かった", kana: "ひろかった", group: "i-adj", base: { kana: "ひろい", kanji: "<ruby>広<rt>ひろ</rt></ruby>い" }, options: ["ひろかった", "ひろいかった", "ひくい{ emoji: "🏞️", en: "was not spacious", kanji: "<ruby>広<rt>ひろ</rt></ruby>くなかった", kana: "ひろくなかった", group: "i-adj", base: { kana: "ひろい", kanji: "<ruby>広<rt>ひろ</rt></ruby>い" }, options: ["ひろくなかった", "ひろいじゃなかった", "ひくいじゃなかった", "ひくくなかった"] },
-かった", "ひくかった"] },
+{ emoji: "🏞️", en: "was spacious", kanji: "<ruby>広<rt>ひろ</rt></ruby>かった", kana: "ひろかった", group: "i-adj", base: { kana: "ひろい", kanji: "<ruby>広<rt>ひろ</rt></ruby>い" }, options: ["ひろかった", "ひろいかった", "ひくいかった", "ひくかった"] },
+{ emoji: "🏞️", en: "was not spacious", kanji: "<ruby>広<rt>ひろ</rt></ruby>くなかった", kana: "ひろくなかった", group: "i-adj", base: { kana: "ひろい", kanji: "<ruby>広<rt>ひろ</rt></ruby>い" }, options: ["ひろくなかった", "ひろいじゃなかった", "ひくいじゃなかった", "ひくくなかった"] },
+
 { emoji: "📐", en: "was narrow", kanji: "<ruby>狭<rt>せま</rt></ruby>かった", kana: "せまかった", group: "i-adj", base: { kana: "せまい", kanji: "<ruby>狭<rt>せま</rt></ruby>い" }, options: ["せまかった", "せまいかった", "しろいかった", "しろかった"] },
 { emoji: "📐", en: "was not narrow", kanji: "<ruby>狭<rt>せま</rt></ruby>くなかった", kana: "せまくなかった", group: "i-adj", base: { kana: "せまい", kanji: "<ruby>狭<rt>せま</rt></ruby>い" }, options: ["せまくなかった", "せまいじゃなかった", "しろいじゃなかった", "しろいくなかった"] },
   {
@@ -920,7 +921,7 @@ const extraKanji = {
     "ただしい": "<ruby>正<rt>ただ</rt></ruby>しい",
     "きびしい": "<ruby>厳<rt>きび</rt></ruby>しい",
     "ていねい": "<ruby>丁寧<rt>ていねい</rt></ruby>",
-    "にんきじゃない": "<ruby>人気<rt>ninki</rt></ruby>じゃない",
+    "にんきじゃない": "<ruby>人気<rt>にんき</rt></ruby>じゃない",
     "にんきくない": "<ruby>人気<rt>ninki</rt></ruby>くない",
     "かわいじゃない": "<ruby>可愛<rt>kawai</rt></ruby>じゃない",
     "うまい": "<ruby>美味<rt>うま</rt></ruby>い",
