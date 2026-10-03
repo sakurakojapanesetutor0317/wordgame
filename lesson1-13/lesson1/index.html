@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Adjective Quiz</title>
+<title>Minna no Nihongo Lesson 1 Quiz</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
@@ -492,14 +492,14 @@ to{ opacity:1; transform:translateY(0); }
 <div id="app">
 
 <div class="homebar">
-    <a class="home-btn" href="https://sakurakojapanesetutor0317.github.io/wordgame/index.html">🏠 Back to Home</a>
+    <a class="home-btn" href="https://sakurakojapanesetutor0317.github.io/wordgame/lesson1-13/index.html">🏠 Back to Home</a>
     <div id="userBar" class="user-pill" style="display:none;">
         <span id="userBarName"></span>　<span class="switch-user" onclick="showLogin()">Switch User</span>
     </div>
 </div>
 
-<h1>🌟 Adjective Quiz</h1>
-<div class="sub">Choose the correct English meaning</div>
+<h1>🌟 Lesson 1 Quiz</h1>
+<div class="sub">Minna no Nihongo Lesson 1 — choose the correct English meaning</div>
 
 <div id="loginScreen" class="screen">
     <h2>Welcome! 🌸</h2>
@@ -644,6 +644,9 @@ function wrongSound(){
   playTone(180,.25);
 }
 
+// ===== Word data (Minna no Nihongo Lesson 1) =====
+// k: kanji + furigana, r: kana, m: romaji, a: English meaning
+
 const data=[
 
 {k:"<ruby>私<rt>わたし</rt></ruby>",r:"わたし",m:"wa ta shi",a:"I"},
@@ -668,6 +671,21 @@ const data=[
 
 ];
 
+
+// Convert to the same shape the other games use
+const quizData = data.map(d => ({ emoji: "", kanji: d.k, kana: d.r, romaji: d.m, en: d.a }));
+
+// こ・そ・あ・ど words always show these 4 choices (in this order)
+const KOSOADO_RE = ["this / near the speaker", "that / near the listener", "that / far away", "which"];
+const KOSOADO_NO = ["this (+ NOUN) / near the speaker", "that (+ NOUN) / near the listener", "that (+ NOUN) / far away", "which (+ NOUN)"];
+const fixedChoices = {
+  "これ": KOSOADO_RE, "それ": KOSOADO_RE, "あれ": KOSOADO_RE, "どれ": KOSOADO_RE,
+  "この": KOSOADO_NO, "その": KOSOADO_NO, "あの": KOSOADO_NO, "どの": KOSOADO_NO
+};
+
+// Progress for this quiz is stored separately from the other games
+const PROGRESS_COL = "progress_lesson2";
+
 // Give each word a fixed index (idx). This is used as the key for
 // Firestore progress records, so missed questions can be looked up
 // accurately later.
@@ -690,7 +708,7 @@ async function ensureUserDoc(name){
 }
 
 async function updateProgress(qIndex, isCorrect){
-  const ref = doc(db, "users", currentUserId, "progress", String(qIndex));
+  const ref = doc(db, "users", currentUserId, PROGRESS_COL, String(qIndex));
   await setDoc(ref, {
     correct: isCorrect,
     lastAttemptAt: serverTimestamp(),
@@ -702,7 +720,7 @@ async function updateProgress(qIndex, isCorrect){
 
 async function getWrongIndices(){
   const q = query(
-    collection(db, "users", currentUserId, "progress"),
+    collection(db, "users", currentUserId, PROGRESS_COL),
     where("correct", "==", false)
   );
   const snap = await getDocs(q);
@@ -729,7 +747,7 @@ let savedIndices = new Set();
 
 async function getSavedIndices(){
   const q = query(
-    collection(db, "users", currentUserId, "progress"),
+    collection(db, "users", currentUserId, PROGRESS_COL),
     where("saved", "==", true)
   );
   const snap = await getDocs(q);
@@ -780,7 +798,7 @@ window.toggleSave = async function(){
   }
   updateSaveButton();
 
-  const ref = doc(db, "users", currentUserId, "progress", String(current.idx));
+  const ref = doc(db, "users", currentUserId, PROGRESS_COL, String(current.idx));
   try{
     await setDoc(ref, {
       saved: !isSaved,
@@ -827,7 +845,7 @@ function renderSavedList(indices){
     const row = document.createElement("div");
     row.className = "saved-item";
     row.innerHTML = `
-      <div class="emoji">${w.emoji}</div>
+      
       <div class="info">
         <div class="word">${w.kanji}</div>
         <div class="meaning">${w.romaji} — ${w.en}</div>
@@ -835,7 +853,7 @@ function renderSavedList(indices){
       <button class="remove-btn" title="Remove">✕</button>
     `;
     row.querySelector(".remove-btn").onclick = async () => {
-      const ref = doc(db, "users", currentUserId, "progress", String(i));
+      const ref = doc(db, "users", currentUserId, PROGRESS_COL, String(i));
       try{
         await setDoc(ref, { saved: false }, { merge: true });
         savedIndices.delete(i);
@@ -971,8 +989,9 @@ function updateView() {
       document.getElementById("mode").checked ? current.kanji : current.kana;
   document.getElementById("romaji").textContent =
       document.getElementById("romajiMode").checked ? current.romaji : "---";
-  document.getElementById("groupDisplay").textContent = current.group ?? "";
-  document.getElementById("exDisplay").textContent = current.ex ?? "";
+  document.getElementById("emojiDisplay").style.display = current.emoji ? "block" : "none";
+  document.getElementById("groupDisplay").style.display = "none";
+  document.getElementById("exDisplay").style.display = "none";
   updateSaveButton();
 }
 window.updateView = updateView;
@@ -1028,16 +1047,19 @@ function nextQuestion() {
   updateView();
 
   // Answer choices
-  let choices = [current.en];
-
-  while (choices.length < 4) {
-    let word = quizData[Math.floor(Math.random() * quizData.length)].en;
-    if (!choices.includes(word)) {
-      choices.push(word);
+  let choices;
+  if (fixedChoices[current.kana]) {
+    choices = fixedChoices[current.kana];
+  } else {
+    choices = [current.en];
+    while (choices.length < 4) {
+      let word = quizData[Math.floor(Math.random() * quizData.length)].en;
+      if (!choices.includes(word)) {
+        choices.push(word);
+      }
     }
+    choices = shuffle(choices);
   }
-
-  choices = shuffle(choices)window;
 
   let html = "";
   choices.forEach(choice => {
@@ -1060,6 +1082,9 @@ window.answer = function(element, choice) {
     correctSound();
   } else {
     element.classList.add("wrong");
+    document.querySelectorAll(".answer").forEach(btn => {
+      if (btn.textContent === current.en) btn.classList.add("correct");
+    });
     document.getElementById("message").textContent = "❌ " + current.en;
     wrongSound();
   }
@@ -1073,13 +1098,7 @@ window.answer = function(element, choice) {
     nextQuestion();
   }, 1000);
 };
-window.start = function(){
-  currentQuizMode = "normal";
-  quiz = shuffle(quizData).slice(0, 20);
-  index = 0;
-  score = 0;
-  beginQuizUI();
-};
+
 window.restart = function(){
   if(currentQuizMode === "review"){
     window.startReview();
