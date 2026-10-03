@@ -535,7 +535,15 @@ to{ opacity:1; transform:translateY(0); }
 }
 #explain .ex-line.en-line{ color:var(--muted); font-size:0.95rem; }
 #explain ruby rt{ font-size:0.55em; letter-spacing:0; }
-#explain .ex-line:not(.en-line){ letter-spacing:0.15em; }
+#explain .ex-jp{ letter-spacing:0.15em; line-height:2.2; }
+#explain .ex-en{
+    font-size:0.85rem;
+    font-weight:600;
+    color:var(--muted);
+    line-height:1.4;
+    margin-bottom:10px;
+}
+#explain .ex-en:last-child{ margin-bottom:0; }
 .particle{
     color:#e0245e;
     font-weight:800;
@@ -804,15 +812,17 @@ function toRomaji(kana){
   return out.join(" ");
 }
 
+const EX_EN = [["The door opens.", "(Someone) opens the door."], ["The window closes.", "(Someone) closes the window."], ["The class begins.", "(The teacher) begins the class."], ["The car stops.", "(Someone) stops the car."], ["The light comes on.", "(Someone) turns on the light."], ["The light goes off.", "(Someone) turns off the light."], ["The book goes in the bag.", "(Someone) puts the book in the bag."], ["Water comes out.", "(Someone) turns on the water."], ["The wallet falls.", "(Someone) drops the wallet."], ["The computer breaks.", "(Someone) breaks the computer."], ["The computer gets fixed.", "(Someone) fixes the computer."], ["The price goes up.", "(The shop) raises the price."], ["The price goes down.", "(The shop) lowers the price."], ["The child wakes up.", "(Someone) wakes the child up."], ["People gather.", "(Someone) gathers people."], ["The date is decided.", "(Someone) decides the date."], ["The plan changes.", "(Someone) changes the plan."], ["The chairs are lined up.", "(Someone) lines up the chairs."], ["The glass breaks.", "(Someone) breaks the glass."], ["The clothes get dirty.", "(Someone) gets the clothes dirty."], ["The key is found.", "(Someone) finds the key."], ["The package arrives.", "(Someone) delivers the package."], ["The practice continues.", "(Someone) continues the practice."], ["The number of people increases.", "(Someone) increases the number of people."], ["My weight goes down.", "(Someone) reduces their weight."], ["My hair dries.", "(Someone) dries their hair."], ["The water boils.", "(Someone) boils the water."], ["The door is locked.", "(Someone) locks the door."], ["The tree falls over.", "(Someone) knocks the tree down."], ["The car moves.", "(Someone) moves the car."], ["The flowers grow.", "(Someone) grows the flowers."], ["Some rice is left over.", "(Someone) leaves some rice uneaten."], ["The top spins.", "(Someone) spins the top."], ["The juice gets cold.", "(Someone) chills the juice."], ["My feelings get across.", "(Someone) tells their feelings."], ["The bread is baked.", "(Someone) bakes the bread."]];
+
 // Shared word data — both game modes are built from this one list.
 // { japanese, kanji(ruby), kana, romaji, english, type, pair, pairId, ex, emoji, idx }
 const quizData = [];
 PAIRS.forEach((p, pairId) => {
   const [emoji, iJ, iK, iE, iEx, tJ, tK, tE, tEx] = p;
   quizData.push({ emoji, japanese: plain(iJ), kanji: toRuby(iJ), kana: iK, english: iE,
-                  type: "Intransitive", pair: plain(tJ), pairId, exRaw: iEx });
+                  type: "Intransitive", pair: plain(tJ), pairId, exRaw: iEx, exEn: EX_EN[pairId][0] });
   quizData.push({ emoji, japanese: plain(tJ), kanji: toRuby(tJ), kana: tK, english: tE,
-                  type: "Transitive", pair: plain(iJ), pairId, exRaw: tEx });
+                  type: "Transitive", pair: plain(iJ), pairId, exRaw: tEx, exEn: EX_EN[pairId][1] });
 });
 // Give each word a fixed index (idx). This is the key for Firestore records.
 quizData.forEach((item, i) => {
@@ -1160,7 +1170,8 @@ function showExplain(current){
   document.getElementById("explain").innerHTML =
     `<div><b>${k ? i.kanji : i.kana}</b> <span class="i-tag qlabel">Intransitive</span> ↔ ` +
     `<b>${k ? t.kanji : t.kana}</b> <span class="t-tag qlabel">Transitive</span></div>` +
-    `<div class="ex-line">${k ? i.exKanji : i.exKana}<br>${k ? t.exKanji : t.exKana}</div>` +
+    `<div class="ex-line"><div class="ex-jp">${k ? i.exKanji : i.exKana}</div><div class="ex-en">${i.exEn}</div>` +
+    `<div class="ex-jp">${k ? t.exKanji : t.exKana}</div><div class="ex-en">${t.exEn}</div></div>` +
     (gameMode === "type" ? `<div class="ex-line en-line">${current.english}</div>` : "");
 }
 
