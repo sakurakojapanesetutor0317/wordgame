@@ -132,7 +132,6 @@ footer{
 }
 .home{
 
-margin-top:35px;
 margin-bottom:20px;
 
 padding:12px 30px;
@@ -142,7 +141,10 @@ background:#818cf8;
 color:white;
 
 border-radius:20px;
-
+width: auto;                  /* 横幅いっぱいになるのを防ぐ */
+    max-width: 230px;             /* 必要に応じて最大幅を制限 */
+    align-self: center;           /* フレックスボックス内で中央に寄せる */
+    padding: 12px 24px;
 text-decoration:none;
 
 font-weight:bold;
@@ -171,8 +173,16 @@ transform:scale(1.05);
 
 </header>
 
+
+
 <div class="container">
 
+
+<div class="home">
+<a class="home" href="../index.html">
+☚ Back to Home
+</a>
+</div>
 
 <div class="grid">
 
@@ -257,11 +267,6 @@ transform:scale(1.05);
 </div>
 
 
-
-<a class="home" href="../index.html">
-☚ Back to Home
-</a>
-</div>
     
 <footer>
 
