@@ -423,6 +423,33 @@ to{ opacity:1; transform:translateY(0); }
   color:var(--ink);
   line-height:1.4;
 }
+
+.home{
+
+margin-top:35px;
+margin-bottom:35px;
+
+padding:12px 30px;
+
+background:#818cf8;
+
+color:white;
+
+border-radius:20px;
+
+text-decoration:none;
+
+font-weight:bold;
+
+transition:.3s;
+
+}
+
+.home:hover{
+
+transform:scale(1.05);
+
+}
 </style>
 
 <div id="app">
@@ -477,6 +504,10 @@ to{ opacity:1; transform:translateY(0); }
 </div>
 
 </div>
+<a class="home" href="https://sakurakojapanesetutor0317.github.io/wordgame/particle/index.html">
+← Back to Home
+</a>
+
 
 <script>
 (function () {
@@ -692,6 +723,7 @@ to{ opacity:1; transform:translateY(0); }
       options: ["に", "で"] }
 
   ];
+
 
   quizData.forEach((item, i) => { item.idx = i; });
 
