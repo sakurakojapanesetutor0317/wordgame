@@ -886,6 +886,19 @@ quizData.forEach((item, i) => {
 let currentUser = null;
 let currentUserId = null;
 
+// Turns a Firebase error into a short message that says what went wrong (shown to the user and in the console).
+function firebaseErrorText(e){
+  const code = (e && e.code) || "unknown";
+  const hints = {
+    "permission-denied": "Access was refused by the Firestore Security Rules.",
+    "unavailable": "Couldn't reach the database. Please check your internet connection.",
+    "failed-precondition": "The database rejected the request (a required index or setting may be missing).",
+    "unauthenticated": "The database requires sign-in for this request.",
+    "invalid-argument": "The name/ID contains characters the database can't use."
+  };
+  return (hints[code] || "Unexpected database error.") + " [" + code + "]";
+}
+
 function sanitizeId(name){
   return name.trim().replace(/[.$#\[\]\/]/g, "_");
 }
@@ -928,7 +941,7 @@ async function refreshWrongCount(){
       : `${wrong.length} question(s) to review`;
   }catch(e){
     console.error("Failed to fetch progress", e);
-    el.textContent = "(Couldn't connect to the database. Please check your Firebase settings)";
+    el.textContent = "(Couldn't load your progress. " + firebaseErrorText(e) + ")";
   }
 }
 
@@ -1023,25 +1036,6 @@ window.showSavedWords = async function(){
 
   renderSavedList(indices);
 };
-// 配列をランダムにシャッフルする関数（Fisher-Yatesアルゴリズム）
-function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
-
-// ゲーム初期化
-function initQuiz() {
-    // 全問題をシャッフルして、その中から先頭の20問を抽出
-    let shuffledAll = shuffle([...allQuestions]);
-    quizQuestions = shuffledAll.slice(0, 20);
-    
-    currentQuestionIndex = 0;
-    score = 0;
-    showQuestion();
-}
 function renderSavedList(indices){
   const listEl = document.getElementById("savedList");
   listEl.innerHTML = "";
@@ -1096,7 +1090,7 @@ window.login = async function(){
     await ensureUserDoc(name);
   }catch(e){
     console.error("Failed to register user", e);
-    alert("Failed to connect to the database. Please check your Firebase settings.");
+    alert("Couldn't log in. " + firebaseErrorText(e));
     return;
   }
 
@@ -1156,8 +1150,8 @@ window.startReview = async function(){
   try{
     wrongIdx = await getWrongIndices();
   }catch(e){
-    console.error(e);
-    alert("Failed to connect to the database. Please check your Firebase settings.");
+    console.error("Failed to fetch missed questions", e);
+    alert("Couldn't load your missed questions. " + firebaseErrorText(e));
     return;
   }
   const wrongQs = wrongIdx.map(i => quizData[i]).filter(Boolean);
